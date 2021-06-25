@@ -78,7 +78,11 @@ async def _(event):
     m = await event.get_reply_message()
     if not m:
         return
-    await event.respond(m)
+    if m.media:
+        await event.client.send_file(event.chat_id,m.media,caption=m.text)
+    else:
+        await event.client.send_message(event.chat_id,m.text)
+        
 
 
 @catub.cat_cmd(
