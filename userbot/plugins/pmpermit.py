@@ -401,7 +401,7 @@ Now you can't do anything unless my master comes online and unblocks you.**"
         return
 
 
-@catub.cat_cmd(incoming=True, func=lambda e: e.is_private, edited=False,forword=True)
+@catub.cat_cmd(incoming=True, func=lambda e: e.is_private, edited=False, forword=True)
 async def on_new_private_message(event):
     if gvarstatus("pmpermit") is None:
         return
@@ -423,7 +423,7 @@ async def on_new_private_message(event):
     await do_pm_permit_action(event, chat)
 
 
-@catub.cat_cmd(outgoing=True, func=lambda e: e.is_private, edited=False,forword=True)
+@catub.cat_cmd(outgoing=True, func=lambda e: e.is_private, edited=False, forword=True)
 async def you_dm_other(event):
     if gvarstatus("pmpermit") is None:
         return
