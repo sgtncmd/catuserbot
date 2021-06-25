@@ -114,16 +114,16 @@ async def send_message(
             comment_to=comment_to,
         )
 
-    msg = str(message)
+    msg = message
     if msg and (
-        (Config.STRING_SESSION in msg)
-        or (str(Config.APP_ID) in msg)
-        or (Config.API_HASH in msg)
-        or (Config.TG_BOT_TOKEN in msg)
-        or (Config.HEROKU_API_KEY and Config.HEROKU_API_KEY in msg)
+        (Config.STRING_SESSION in str(msg))
+        or (str(Config.APP_ID) in str(msg))
+        or (Config.API_HASH in str(msg))
+        or (Config.TG_BOT_TOKEN in str(msg))
+        or (Config.HEROKU_API_KEY and Config.HEROKU_API_KEY in str(msg))
         or (
             Config.SCREEN_SHOT_LAYER_ACCESS_KEY
-            and Config.SCREEN_SHOT_LAYER_ACCESS_KEY in msg
+            and Config.SCREEN_SHOT_LAYER_ACCESS_KEY in str(msg)
         )
     ):
         if Config.BOTLOG:
@@ -229,14 +229,14 @@ async def send_file(
 
     msg = caption
     if msg and (
-        (Config.STRING_SESSION in msg)
-        or (str(Config.APP_ID) in msg)
-        or (Config.API_HASH in msg)
-        or (Config.TG_BOT_TOKEN in msg)
-        or (Config.HEROKU_API_KEY and Config.HEROKU_API_KEY in msg)
+        (Config.STRING_SESSION in str(msg))
+        or (str(Config.APP_ID) in str(msg))
+        or (Config.API_HASH in str(msg))
+        or (Config.TG_BOT_TOKEN in str(msg))
+        or (Config.HEROKU_API_KEY and Config.HEROKU_API_KEY in str(msg))
         or (
             Config.SCREEN_SHOT_LAYER_ACCESS_KEY
-            and Config.SCREEN_SHOT_LAYER_ACCESS_KEY in msg
+            and Config.SCREEN_SHOT_LAYER_ACCESS_KEY in str(msg)
         )
     ):
         if Config.BOTLOG:
