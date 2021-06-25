@@ -56,8 +56,11 @@ async def catbroadcast_add(event):
     if reason:
         msg = await event.client.send_message(user.id, reason)
         await edit_delete(event, "__Successfully sent the message.__")
-    elif reply:
-        msg = await event.client.send_message(user.id, reply)
+    elif reply and reply.media:
+        msg = await event.client.send_file(user.id, reply.media,caption=reply.message)
+        await edit_delete(event, "__Successfully sent the message.__")
+    elif reply and reply.text:
+        msg = await event.client.send_file(user.id, reply.text)
         await edit_delete(event, "__Successfully sent the message.__")
 
 
