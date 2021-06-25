@@ -69,7 +69,8 @@ async def currency(event):
         except KeyError:
             return await edit_delete(
                 event,
-                "__You have used wrong currency codes or Api can't fetch details.__",
+                "__You have used wrong currency codes or Api can't fetch details or try by restarting bot it will work if everything is fine.__",
+                time=10
             )
         output = float(value) * float(result)
         output = round(output, 4)
