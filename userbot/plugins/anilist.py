@@ -288,7 +288,7 @@ async def anime_download(event):  # sourcery no-metrics
                     break
                 post_link = entry.a["href"]
                 post_name = html.escape(entry.text.strip())
-            result += f"• <a href={post_link}>{post_name}</a>\n"
+                result += f"• <a href={post_link}>{post_name}</a>\n"
         else:
             result = f"<b>No result found for</b> <code>{html.escape(search_query)}</code> <b>on</b> <code>IndiAnime</code>"
     await catevent.edit(result, parse_mode="html")
