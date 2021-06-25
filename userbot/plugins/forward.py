@@ -79,10 +79,9 @@ async def _(event):
     if not m:
         return
     if m.media:
-        await event.client.send_file(event.chat_id,m.media,caption=m.text)
+        await event.client.send_file(event.chat_id, m.media, caption=m.text)
     else:
-        await event.client.send_message(event.chat_id,m.text)
-        
+        await event.client.send_message(event.chat_id, m.text)
 
 
 @catub.cat_cmd(
