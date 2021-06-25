@@ -114,7 +114,7 @@ async def send_message(
             comment_to=comment_to,
         )
 
-    msg = message
+    msg = str(message)
     if msg and (
         (Config.STRING_SESSION in msg)
         or (str(Config.APP_ID) in msg)
