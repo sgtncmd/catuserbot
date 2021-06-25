@@ -166,7 +166,7 @@ async def on_afk(event):  # sourcery no-metrics
 
 
 @catub.cat_cmd(
-    pattern="afk(?: |$)(.*)",
+    pattern="afk(?:\s|$)([\s\S]*)",
     command=("afk", plugin_category),
     info={
         "header": "Enables afk for your account",
@@ -226,7 +226,7 @@ async def _(event):
 
 
 @catub.cat_cmd(
-    pattern="mafk(?: |$)(.*)",
+    pattern="mafk(?:\s|$)([\s\S]*)",
     command=("mafk", plugin_category),
     info={
         "header": "Enables afk for your account",

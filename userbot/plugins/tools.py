@@ -28,7 +28,7 @@ LOGS = logging.getLogger(__name__)
 
 
 @catub.cat_cmd(
-    pattern="cur(?: |$)(.*)",
+    pattern="cur(?:\s|$)([\s\S]*)",
     command=("cur", plugin_category),
     info={
         "header": "To convert one currency value to other.",
@@ -160,7 +160,7 @@ async def parseqr(event):
 
 
 @catub.cat_cmd(
-    pattern="barcode ?(.*)",
+    pattern="barcode ?([\s\S]*)",
     command=("barcode", plugin_category),
     info={
         "header": "To get barcode of given text.",
@@ -256,7 +256,7 @@ async def make_qr(makeqr):
 
 
 @catub.cat_cmd(
-    pattern="cal (.*)",
+    pattern="cal ([\s\S]*)",
     command=("cal", plugin_category),
     info={
         "header": "To get calendar of given month and year.",
@@ -281,7 +281,7 @@ async def _(event):
 
 
 @catub.cat_cmd(
-    pattern="ifsc (.*)",
+    pattern="ifsc ([\s\S]*)",
     command=("ifsc", plugin_category),
     info={
         "header": "to get details of the relevant bank or branch.",
@@ -304,7 +304,7 @@ async def _(event):
 
 
 @catub.cat_cmd(
-    pattern="color (.*)",
+    pattern="color ([\s\S]*)",
     command=("color", plugin_category),
     info={
         "header": "To get color pic of given hexa color code.",
@@ -340,7 +340,7 @@ async def _(event):
 
 
 @catub.cat_cmd(
-    pattern="xkcd(?: |$)(.*)",
+    pattern="xkcd(?:\s|$)([\s\S]*)",
     command=("xkcd", plugin_category),
     info={
         "header": "Searches for the query for the relevant XKCD comic.",
