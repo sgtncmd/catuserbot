@@ -358,6 +358,8 @@ async def edit_message(
         if not str(chatid).startswith("-100") and botlogchtid.startswith("-100")
         else botlogchtid
     )
+    print(chatid)
+    print(botlogchatid)
     if str(chatid) == botlogchtid:
         return await client.editmessage(
             entity=entity,
