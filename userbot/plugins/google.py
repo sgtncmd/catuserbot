@@ -8,8 +8,8 @@ from datetime import datetime
 import requests
 from bs4 import BeautifulSoup
 from PIL import Image
-from search_engine_parser import GoogleSearch
-
+from search_engine_parser import GoogleSearch, BingSearch
+from search_engine_parser.core.exceptions import NoResultsOrTrafficError
 from userbot import catub
 
 from ..Config import Config
@@ -102,8 +102,11 @@ async def gsearch(q_event):
         lim = 5
     search_args = (str(match), int(page))
     gsearch = GoogleSearch()
+    bsearch = BingSearch()
     try:
         gresults = await gsearch.async_search(*search_args)
+    except NoResultsOrTrafficError:
+        gresults = await bsearch.async_search(*search_args)
     except Exception as e:
         return await edit_delete(catevent, f"**Error:**\n`{str(e)}`", time=10)
     msg = ""
