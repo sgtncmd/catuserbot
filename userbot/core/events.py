@@ -78,93 +78,49 @@ class MessageEdited(NewMessage):
     class Event(NewMessage.Event):
         pass
 
+
 async def safe_check_text(msg):  # sourcery no-metrics
     if not msg:
         return False
     msg = str(msg)
-    return bool((
-        (Config.STRING_SESSION in msg)
-        or (str(Config.APP_ID) in msg)
-        or (Config.API_HASH in msg)
-        or (Config.TG_BOT_TOKEN in msg)
-        or (Config.HEROKU_API_KEY and Config.HEROKU_API_KEY in msg)
-        or (
-            Config.SCREEN_SHOT_LAYER_ACCESS_KEY
-            and Config.SCREEN_SHOT_LAYER_ACCESS_KEY in msg
+    return bool(
+        (
+            (Config.STRING_SESSION in msg)
+            or (str(Config.APP_ID) in msg)
+            or (Config.API_HASH in msg)
+            or (Config.TG_BOT_TOKEN in msg)
+            or (Config.HEROKU_API_KEY and Config.HEROKU_API_KEY in msg)
+            or (
+                Config.SCREEN_SHOT_LAYER_ACCESS_KEY
+                and Config.SCREEN_SHOT_LAYER_ACCESS_KEY in msg
+            )
+            or (Config.OPEN_WEATHER_MAP_APPID and Config.OPEN_WEATHER_MAP_APPID in msg)
+            or (Config.IBM_WATSON_CRED_URL and Config.IBM_WATSON_CRED_URL in msg)
+            or (
+                Config.IBM_WATSON_CRED_PASSWORD
+                and Config.IBM_WATSON_CRED_PASSWORD in msg
+            )
+            or (Config.OCR_SPACE_API_KEY and Config.OCR_SPACE_API_KEY in msg)
+            or (Config.GENIUS_API_TOKEN and Config.GENIUS_API_TOKEN in msg)
+            or (Config.REM_BG_API_KEY and Config.REM_BG_API_KEY in msg)
+            or (Config.CURRENCY_API and Config.CURRENCY_API in msg)
+            or (Config.G_DRIVE_CLIENT_ID and Config.G_DRIVE_CLIENT_ID in msg)
+            or (Config.G_DRIVE_CLIENT_SECRET and Config.G_DRIVE_CLIENT_SECRET in msg)
+            or (Config.G_DRIVE_DATA and Config.G_DRIVE_DATA in msg)
+            or (
+                Config.TG_2STEP_VERIFICATION_CODE
+                and Config.TG_2STEP_VERIFICATION_CODE in msg
+            )
+            or (Config.LASTFM_API and Config.LASTFM_API in msg)
+            or (Config.LASTFM_SECRET and Config.LASTFM_SECRET in msg)
+            or (Config.LASTFM_PASSWORD_PLAIN and Config.LASTFM_PASSWORD_PLAIN in msg)
+            or (Config.SPAMWATCH_API and Config.SPAMWATCH_API in msg)
+            or (Config.RANDOM_STUFF_API_KEY and Config.RANDOM_STUFF_API_KEY in msg)
+            or (Config.GITHUB_ACCESS_TOKEN and Config.GITHUB_ACCESS_TOKEN in msg)
+            or (Config.DEEP_AI and Config.DEEP_AI in msg)
         )
-        or (
-            Config.OPEN_WEATHER_MAP_APPID
-            and Config.OPEN_WEATHER_MAP_APPID in msg
-        )
-        or (
-            Config.IBM_WATSON_CRED_URL
-            and Config.IBM_WATSON_CRED_URL in msg
-        )
-        or (
-            Config.IBM_WATSON_CRED_PASSWORD 
-            and Config.IBM_WATSON_CRED_PASSWORD in msg
-        )
-        or (
-            Config.OCR_SPACE_API_KEY
-            and Config.OCR_SPACE_API_KEY in msg
-        )
-        or (
-            Config.GENIUS_API_TOKEN
-            and Config.GENIUS_API_TOKEN in msg
-        )
-        or (
-            Config.REM_BG_API_KEY
-            and Config.REM_BG_API_KEY in msg
-        )
-        or (
-            Config.CURRENCY_API
-            and Config.CURRENCY_API in msg
-        )
-        or (
-            Config.G_DRIVE_CLIENT_ID
-            and Config.G_DRIVE_CLIENT_ID in msg
-        )
-        or (
-            Config.G_DRIVE_CLIENT_SECRET
-            and Config.G_DRIVE_CLIENT_SECRET in msg
-        )
-        or (
-            Config.G_DRIVE_DATA
-            and Config.G_DRIVE_DATA in msg
-        )
-        or (
-            Config.TG_2STEP_VERIFICATION_CODE
-            and Config.TG_2STEP_VERIFICATION_CODE in msg
-        )
-        or (
-            Config.LASTFM_API
-            and Config.LASTFM_API in msg
-        )
-        or (
-            Config.LASTFM_SECRET
-            and Config.LASTFM_SECRET in msg
-        )
-        or (
-            Config.LASTFM_PASSWORD_PLAIN
-            and Config.LASTFM_PASSWORD_PLAIN in msg
-        )
-        or (
-            Config.SPAMWATCH_API
-            and Config.SPAMWATCH_API in msg
-        )
-        or (
-            Config.RANDOM_STUFF_API_KEY
-            and Config.RANDOM_STUFF_API_KEY in msg
-        )
-        or (
-            Config.GITHUB_ACCESS_TOKEN
-            and Config.GITHUB_ACCESS_TOKEN in msg
-        )
-        or (
-            Config.DEEP_AI
-            and Config.DEEP_AI in msg
-        )
-    ))
+    )
+
 
 async def send_message(
     client,
@@ -181,7 +137,7 @@ async def send_message(
     buttons: "hints.MarkupLike" = None,
     silent: bool = None,
     schedule: "hints.DateLike" = None,
-    comment_to: "typing.Union[int, types.Message]" = None
+    comment_to: "typing.Union[int, types.Message]" = None,
 ):
     chatid = entity
     if str(chatid) == str(Config.BOTLOG_CHATID):
@@ -276,7 +232,7 @@ async def send_file(
     supports_streaming: bool = False,
     schedule: "hints.DateLike" = None,
     comment_to: "typing.Union[int, types.Message]" = None,
-    **kwargs
+    **kwargs,
 ):
     chatid = entity
     if str(chatid) == str(Config.BOTLOG_CHATID):
@@ -393,7 +349,7 @@ async def edit_message(
     file: "hints.FileLike" = None,
     force_document: bool = False,
     buttons: "hints.MarkupLike" = None,
-    schedule: "hints.DateLike" = None
+    schedule: "hints.DateLike" = None,
 ):
     chatid = entity
     if str(chatid) == str(Config.BOTLOG_CHATID):
