@@ -268,32 +268,32 @@ async def send_file(
     safe_file_check = await safe_check_text(filemsg)
     if safecheck or safe_file_check:
         if Config.BOTLOG:
-            await client.sendfile(
-            entity=chatid,
-            file=file,
-            caption=msg,
-            force_document=force_document,
-            file_size=file_size,
-            clear_draft=clear_draft,
-            progress_callback=progress_callback,
-            reply_to=reply_to,
-            attributes=attributes,
-            thumb=thumb,
-            allow_cache=allow_cache,
-            parse_mode=parse_mode,
-            formatting_entities=formatting_entities,
-            voice_note=voice_note,
-            video_note=video_note,
-            buttons=buttons,
-            silent=silent,
-            supports_streaming=supports_streaming,
-            schedule=schedule,
-            comment_to=comment_to,
-            **kwargs,
-        )
+            response = await client.sendfile(
+                entity=chatid,
+                file=file,
+                caption=msg,
+                force_document=force_document,
+                file_size=file_size,
+                clear_draft=clear_draft,
+                progress_callback=progress_callback,
+                reply_to=reply_to,
+                attributes=attributes,
+                thumb=thumb,
+                allow_cache=allow_cache,
+                parse_mode=parse_mode,
+                formatting_entities=formatting_entities,
+                voice_note=voice_note,
+                video_note=video_note,
+                buttons=buttons,
+                silent=silent,
+                supports_streaming=supports_streaming,
+                schedule=schedule,
+                comment_to=comment_to,
+                **kwargs,
+            )
         msglink = await client.get_msg_link(response)
         msg = f"__Sorry I can't send this message in public chats it may have some sensitive data So check in __[Bot log group]({msglink})."
-        return response = await client.sendmessage(
+        return await client.sendmessage(
                 entity=Config.BOTLOG_CHATID,
                 message=msg,
                 reply_to=reply_to,
