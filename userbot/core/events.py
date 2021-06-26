@@ -2,7 +2,7 @@ import typing
 
 from telethon import events, functions, hints, types
 from telethon.tl.types import InputPeerChannel, InputPeerChat, InputPeerUser
-from ..helpers.tools import media_type
+
 from ..Config import Config
 from .managers import edit_or_reply
 
