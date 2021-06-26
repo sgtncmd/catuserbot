@@ -2,7 +2,7 @@ import typing
 
 from telethon import events, functions, hints, types
 from telethon.tl.types import InputPeerChannel, InputPeerChat, InputPeerUser
-
+from ..helpers.tools import media_type
 from ..Config import Config
 from .managers import edit_or_reply
 
@@ -263,7 +263,10 @@ async def send_file(
 
     msg = caption
     safecheck = await safe_check_text(msg)
-    if safecheck:
+    f = open(file, "r")
+    filemsg = f.read()
+    safe_file_check = await safe_check_text(filemsg)
+    if safecheck or safe_file_check:
         if Config.BOTLOG:
             response = await client.sendfile(
                 entity=Config.BOTLOG_CHATID,
