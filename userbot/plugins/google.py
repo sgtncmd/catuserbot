@@ -8,7 +8,7 @@ from datetime import datetime
 import requests
 from bs4 import BeautifulSoup
 from PIL import Image
-from search_engine_parser import BingSearch, GoogleSearch
+from search_engine_parser import BingSearch, GoogleSearch, YahooSearch
 from search_engine_parser.core.exceptions import NoResultsOrTrafficError
 
 from userbot import catub
@@ -104,12 +104,17 @@ async def gsearch(q_event):
     search_args = (str(match), int(page))
     gsearch = GoogleSearch()
     bsearch = BingSearch()
+    ysearch = YahooSearch()
     try:
         gresults = await gsearch.async_search(*search_args)
     except NoResultsOrTrafficError:
-        gresults = await bsearch.async_search(*search_args)
-    except Exception as e:
-        return await edit_delete(catevent, f"**Error:**\n`{str(e)}`", time=10)
+        try:
+            gresults = await bsearch.async_search(*search_args)
+        except NoResultsOrTrafficError:
+            try:
+                gresults = await ysearch.async_search(*search_args)
+            except Exception as e:
+                return await edit_delete(catevent, f"**Error:**\n`{str(e)}`", time=10)
     msg = ""
     for i in range(lim):
         if i > len(gresults["links"]):
