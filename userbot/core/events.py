@@ -352,15 +352,15 @@ async def edit_message(
     schedule: "hints.DateLike" = None,
 ):
     chatid = entity
-    botlogchtid = str(Config.BOTLOG_CHATID)
-    botlogchtid = (
-        botlogchtid[4:]
-        if not str(chatid).startswith("-100") and botlogchtid.startswith("-100")
-        else botlogchtid
+    botlogchatid = str(Config.BOTLOG_CHATID)
+    botlogchatid = (
+        botlogchatid[4:]
+        if not str(chatid).startswith("-100") and botlogchatid.startswith("-100")
+        else botlogchatid
     )
     print(chatid)
     print(botlogchatid)
-    if str(chatid) == botlogchtid:
+    if str(chatid) == botlogchatid:
         return await client.editmessage(
             entity=entity,
             message=message,
