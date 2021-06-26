@@ -101,8 +101,8 @@ async def gsearch(q_event):
             lim = int(5)
     except IndexError:
         lim = 5
-#     smatch = urllib.parse.quote_plus(match)
-    smatch = match.replace(" " , "+") 
+    #     smatch = urllib.parse.quote_plus(match)
+    smatch = match.replace(" ", "+")
     search_args = (str(smatch), int(page))
     gsearch = GoogleSearch()
     bsearch = BingSearch()
