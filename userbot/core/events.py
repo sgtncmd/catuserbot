@@ -238,7 +238,7 @@ async def send_file(
     chatid = entity
     if str(chatid) == str(Config.BOTLOG_CHATID):
         return await client.sendfile(
-            entity=chatid,
+            entity=Config.BOTLOG_CHATID,
             file=file,
             caption=caption,
             force_document=force_document,
