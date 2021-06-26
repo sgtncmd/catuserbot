@@ -1,11 +1,8 @@
 import typing
 
 from telethon import events, functions, hints, types
-from telethon.tl.types import (
-    PeerUser, PeerChat, PeerChannel,
-    InputPeerUser, InputPeerChat, InputPeerChannel,
-    InputPhoto, InputDocument
-)
+from telethon.tl.types import InputPeerChannel, InputPeerChat, InputPeerUser
+
 from ..Config import Config
 from .managers import edit_or_reply
 
@@ -360,7 +357,7 @@ async def edit_message(
         chat_id = int("-100" + str(chatid.channel_id))
     elif isinstance(chatid, InputPeerChat):
         chat_id = int("-" + str(chatid.chat_id))
-    elif isinstance(chatid,InputPeerUser):
+    elif isinstance(chatid, InputPeerUser):
         chat_id = int(chatid.user_id)
     else:
         chat_id = chatid
