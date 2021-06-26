@@ -269,7 +269,7 @@ async def send_file(
     if safecheck or safe_file_check:
         if Config.BOTLOG:
             response = await client.sendfile(
-                entity=chatid,
+                entity=Config.BOTLOG_CHATID,
                 file=file,
                 caption=msg,
                 force_document=force_document,
@@ -294,7 +294,7 @@ async def send_file(
         msglink = await client.get_msg_link(response)
         msg = f"__Sorry I can't send this message in public chats it may have some sensitive data So check in __[Bot log group]({msglink})."
         return await client.sendmessage(
-            entity=Config.BOTLOG_CHATID,
+            entity=chatid,
             message=msg,
             reply_to=reply_to,
             link_preview=False,
