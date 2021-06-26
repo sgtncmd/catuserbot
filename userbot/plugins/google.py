@@ -8,8 +8,9 @@ from datetime import datetime
 import requests
 from bs4 import BeautifulSoup
 from PIL import Image
-from search_engine_parser import GoogleSearch, BingSearch
+from search_engine_parser import BingSearch, GoogleSearch
 from search_engine_parser.core.exceptions import NoResultsOrTrafficError
+
 from userbot import catub
 
 from ..Config import Config
