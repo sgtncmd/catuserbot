@@ -4,7 +4,6 @@ import os
 import re
 import urllib
 from datetime import datetime
-
 import requests
 from bs4 import BeautifulSoup
 from PIL import Image
@@ -101,6 +100,7 @@ async def gsearch(q_event):
             lim = int(5)
     except IndexError:
         lim = 5
+    match = urllib.parse.quote_plus(match)
     search_args = (str(match), int(page))
     gsearch = GoogleSearch()
     bsearch = BingSearch()
