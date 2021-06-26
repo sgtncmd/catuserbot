@@ -294,14 +294,14 @@ async def send_file(
         msglink = await client.get_msg_link(response)
         msg = f"__Sorry I can't send this message in public chats it may have some sensitive data So check in __[Bot log group]({msglink})."
         return await client.sendmessage(
-                entity=Config.BOTLOG_CHATID,
-                message=msg,
-                reply_to=reply_to,
-                link_preview=False,
-                silent=silent,
-                schedule=schedule,
-                comment_to=comment_to,
-            )
+            entity=Config.BOTLOG_CHATID,
+            message=msg,
+            reply_to=reply_to,
+            link_preview=False,
+            silent=silent,
+            schedule=schedule,
+            comment_to=comment_to,
+        )
     return await client.sendfile(
         entity=chatid,
         file=file,
