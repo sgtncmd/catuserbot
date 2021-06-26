@@ -177,7 +177,7 @@ async def send_message(
                 comment_to=comment_to,
             )
         msglink = await client.get_msg_link(response)
-        msg = f"__Sorry I can't send this message in public chats it may have some sensitive date So check in __[Bot log group]({msglink})."
+        msg = f"__Sorry I can't send this message in public chats it may have some sensitive data So check in __[Bot log group]({msglink})."
         return await client.sendmessage(
             entity=chatid,
             message=msg,
@@ -289,7 +289,7 @@ async def send_file(
                 **kwargs,
             )
         msglink = await client.get_msg_link(response)
-        msg = f"__Sorry I can't send this message in public chats it may have some sensitive date So check in __[Bot log group]({msglink})."
+        msg = f"__Sorry I can't send this message in public chats it may have some sensitive data So check in __[Bot log group]({msglink})."
         return await client.sendfile(
             entity=chatid,
             file=file,
@@ -390,7 +390,7 @@ async def edit_message(
                 schedule=schedule,
             )
         msglink = await client.get_msg_link(response)
-        msg = f"__Sorry I can't send this message in public chats it may have some sensitive date So check in __[Bot log group]({msglink})."
+        msg = f"__Sorry I can't send this message in public chats it may have some sensitive data So check in __[Bot log group]({msglink})."
         return await client.editmessage(
             entity=chatid,
             message=message,
