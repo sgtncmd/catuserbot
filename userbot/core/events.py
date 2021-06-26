@@ -1,7 +1,11 @@
 import typing
 
 from telethon import events, functions, hints, types
-
+from telethon.tl.types import (
+    PeerUser, PeerChat, PeerChannel,
+    InputPeerUser, InputPeerChat, InputPeerChannel,
+    InputPhoto, InputDocument
+)
 from ..Config import Config
 from .managers import edit_or_reply
 
@@ -352,15 +356,15 @@ async def edit_message(
     schedule: "hints.DateLike" = None,
 ):
     chatid = entity
-    botlogchatid = str(Config.BOTLOG_CHATID)
-    botlogchatid = (
-        botlogchatid[4:]
-        if not str(chatid).startswith("-100") and botlogchatid.startswith("-100")
-        else botlogchatid
-    )
-    print(chatid)
-    print(botlogchatid)
-    if str(chatid) == botlogchatid:
+    if isinstance(chatid, InputPeerChannel):
+        chat_id = int("-100" + str(chatid.channel_id))
+    elif isinstance(chatid, InputPeerChat):
+        chat_id = int("-" + str(chatid.chat_id))
+    elif isinstance(chatid,InputPeerUser):
+        chat_id = int(chatid.user_id)
+    else:
+        chat_id = chatid
+    if str(chat_id) == str(Config.BOTLOG_CHATID):
         return await client.editmessage(
             entity=entity,
             message=message,
