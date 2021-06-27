@@ -254,7 +254,7 @@ async def verifyLoggerGroup():
         sys.exit(0)
         
 async def checkplugins(filename):
-    if filename = "userbot/core/events.py":
+    if filename == "userbot/core/events.py":
         return
     with open(filename, 'r') as f:
       filedata = f.read()
