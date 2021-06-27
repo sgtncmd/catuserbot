@@ -40,9 +40,7 @@ async def _(event):
             "`Reply to a voice message or Audio, to get the relevant transcript.`",
         )
     catevent = await edit_or_reply(event, "`Downloading to my local, for analysis  🙇`")
-    required_file_name = await event.client.download_media(
-        reply, Config.TEMP_DIR
-    )
+    required_file_name = await event.client.download_media(reply, Config.TEMP_DIR)
     await catevent.edit("`Starting analysis, using IBM WatSon Speech To Text`")
     headers = {
         "Content-Type": reply.media.document.mime_type,
