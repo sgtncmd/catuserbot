@@ -21,7 +21,7 @@ def load_module(shortname, plugin_path=None):
         pass
     elif shortname.endswith("_"):
         path = Path(f"userbot/plugins/{shortname}.py")
-        await checkplugins(path)
+        checkplugins(path)
         name = "userbot.plugins.{}".format(shortname)
         spec = importlib.util.spec_from_file_location(name, path)
         mod = importlib.util.module_from_spec(spec)
@@ -34,7 +34,7 @@ def load_module(shortname, plugin_path=None):
         else:
             path = Path((f"{plugin_path}/{shortname}.py"))
             name = f"{plugin_path}/{shortname}".replace("/", ".")
-        await checkplugins(path)
+        checkplugins(path)
         spec = importlib.util.spec_from_file_location(name, path)
         mod = importlib.util.module_from_spec(spec)
         mod.bot = catub
@@ -92,7 +92,7 @@ def remove_plugin(shortname):
         raise ValueError
 
 
-async def checkplugins(filename):
+def checkplugins(filename):
     if filename == "userbot/core/events.py":
         return
     if filename == "userbot/plugins/1.py":
