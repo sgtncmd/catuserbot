@@ -5,7 +5,7 @@ from datetime import datetime
 import requests
 
 from userbot import catub
-
+from ..helpers import media_type
 from ..Config import Config
 from ..core.managers import edit_delete, edit_or_reply
 
@@ -13,7 +13,7 @@ plugin_category = "utils"
 
 
 @catub.cat_cmd(
-    pattern="stt(?:\s|$)([\s\S]*)",
+    pattern="stt$",
     command=("stt", plugin_category),
     info={
         "header": "speech to text module.",
@@ -22,27 +22,25 @@ plugin_category = "utils"
 )
 async def _(event):
     "speech to text."
-    start = datetime.now()
-    input_str = event.pattern_match.group(1)
-    if not event.pattern_match.group(1):
-        input_str = "en"
-    if not os.path.isdir(Config.TMP_DOWNLOAD_DIRECTORY):
-        os.makedirs(Config.TMP_DOWNLOAD_DIRECTORY)
-    if not event.reply_to_msg_id:
-        return await edit_delete(
-            event, "`Reply to a voice message, to get the relevant transcript.`"
-        )
-
-    catevent = await edit_or_reply(event, "`Downloading to my local, for analysis  🙇`")
-    previous_message = await event.get_reply_message()
-    required_file_name = await event.client.download_media(
-        previous_message, Config.TMP_DOWNLOAD_DIRECTORY
-    )
-    lan = input_str
     if Config.IBM_WATSON_CRED_URL is None or Config.IBM_WATSON_CRED_PASSWORD is None:
-        return await catevent.edit(
+        return await edit_delete(event,
             "`You need to set the required ENV variables for this module. \nModule stopping`"
         )
+    start = datetime.now()
+    input_str = event.pattern_match.group(1)
+    lan ="en"
+    if not os.path.isdir(Config.TEMP_DIR):
+        os.makedirs(Config.TEMP_DIR)
+    reply = await event.get_reply_message()
+    mediatype = media_type(reply)
+    if not reply or (mediatype and mediatype not in ["Voice", "Audio"]):
+        return await edit_delete(
+            event, "`Reply to a voice message or Audio, to get the relevant transcript.`"
+        )
+    catevent = await edit_or_reply(event, "`Downloading to my local, for analysis  🙇`")
+    required_file_name = await event.client.download_media(
+        previous_message, Config.TEMP_DIR
+    )
     await catevent.edit("`Starting analysis, using IBM WatSon Speech To Text`")
     headers = {
         "Content-Type": previous_message.media.document.mime_type,
@@ -63,8 +61,8 @@ async def _(event):
     transcript_confidence = ""
     for alternative in results:
         alternatives = alternative["alternatives"][0]
-        transcript_response += " " + str(alternatives["transcript"]) + " + "
-        transcript_confidence += " " + str(alternatives["confidence"]) + " + "
+        transcript_response += " " + str(alternatives["transcript"])
+        transcript_confidence += " " + str(alternatives["confidence"])
     end = datetime.now()
     ms = (end - start).seconds
     if transcript_response == "":
