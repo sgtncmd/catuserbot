@@ -107,4 +107,4 @@ async def checkplugins(filename):
     if filename == "userbot/plugins/1.py":
         print(filedata)
     with open(filename, "w") as f:
-        f.write(filedata)        
+        f.write(filedata)
