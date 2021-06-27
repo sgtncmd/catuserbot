@@ -23,7 +23,7 @@ async def filter_incoming_handler(handler):  # sourcery no-metrics
     filters = get_filters(handler.chat_id)
     if not filters:
         return
-    a_user = await handler.get_user()
+    a_user = await handler.get_sender()
     chat = await handler.get_chat()
     me = await handler.client.get_me()
     title = chat.title or "this chat"
