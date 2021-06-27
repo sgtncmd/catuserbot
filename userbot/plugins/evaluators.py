@@ -64,7 +64,11 @@ async def _(event):
     cmd = "".join(event.message.message.split(maxsplit=1)[1:])
     if not cmd:
         return await edit_delete(event, "`What should i run ?..`")
-    cmd = cmd.replace("sendmessage","send_message").replace("sendfile","send_file").replace("editmessage","edit_message") 
+    cmd = (
+        cmd.replace("sendmessage", "send_message")
+        .replace("sendfile", "send_file")
+        .replace("editmessage", "edit_message")
+    )
     catevent = await edit_or_reply(event, "`Running ...`")
     old_stderr = sys.stderr
     old_stdout = sys.stdout
