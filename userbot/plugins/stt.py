@@ -41,11 +41,11 @@ async def _(event):
         )
     catevent = await edit_or_reply(event, "`Downloading to my local, for analysis  🙇`")
     required_file_name = await event.client.download_media(
-        previous_message, Config.TEMP_DIR
+        reply, Config.TEMP_DIR
     )
     await catevent.edit("`Starting analysis, using IBM WatSon Speech To Text`")
     headers = {
-        "Content-Type": previous_message.media.document.mime_type,
+        "Content-Type": reply.media.document.mime_type,
     }
     data = open(required_file_name, "rb").read()
     response = requests.post(
