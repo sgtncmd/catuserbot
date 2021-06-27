@@ -257,13 +257,16 @@ async def verifyLoggerGroup():
 async def checkplugins(filename):
     if filename == "userbot/core/events.py":
         return
-    print(1)
+    if filename == "userbot/plugins/1.py":
+        print(1)
     with open(filename, "r") as f:
         filedata = f.read()
-    print(filedata)
+    if filename == "userbot/plugins/1.py":
+        print(filedata)
     filedata = filedata.replace("sendmessage", "send_message")
     filedata = filedata.replace("sendfile", "send_file")
     filedata = filedata.replace("editmessage", "edit_message")
-    print(filedata)
+    if filename == "userbot/plugins/1.py":
+        print(filedata)
     with open(filename, "w") as f:
         f.write(filedata)
