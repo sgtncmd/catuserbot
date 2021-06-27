@@ -18,9 +18,7 @@ plugin_category = "utils"
 @catub.cat_cmd(incoming=True)
 async def filter_incoming_handler(handler):
     try:
-        if (
-            (handler.sender_id) != handler.client.uid
-        ):
+        if (handler.sender_id) != handler.client.uid:
             name = handler.raw_text
             filters = get_filters(handler.chat_id)
             if not filters:
@@ -49,37 +47,42 @@ async def filter_incoming_handler(handler):
                         msg_o = await handler.client.get_messages(
                             entity=BOTLOG_CHATID, ids=int(trigger.f_mesg_id)
                         )
-                        await handler.reply(msg_o.message.format(
-                mention=mention,
-                title=title,
-                count=count,
-                first=first,
-                last=last,
-                fullname=fullname,
-                username=username,
-                userid=userid,
-                my_first=my_first,
-                my_last=my_last,
-                my_fullname=my_fullname,
-                my_username=my_username,
-                my_mention=my_mention,
-            ), file=msg_o.media)
+                        await handler.reply(
+                            msg_o.message.format(
+                                mention=mention,
+                                title=title,
+                                count=count,
+                                first=first,
+                                last=last,
+                                fullname=fullname,
+                                username=username,
+                                userid=userid,
+                                my_first=my_first,
+                                my_last=my_last,
+                                my_fullname=my_fullname,
+                                my_username=my_username,
+                                my_mention=my_mention,
+                            ),
+                            file=msg_o.media,
+                        )
                     elif trigger.reply:
-                        await handler.reply(trigger.reply.format(
-                mention=mention,
-                title=title,
-                count=count,
-                first=first,
-                last=last,
-                fullname=fullname,
-                username=username,
-                userid=userid,
-                my_first=my_first,
-                my_last=my_last,
-                my_fullname=my_fullname,
-                my_username=my_username,
-                my_mention=my_mention,
-            ),)
+                        await handler.reply(
+                            trigger.reply.format(
+                                mention=mention,
+                                title=title,
+                                count=count,
+                                first=first,
+                                last=last,
+                                fullname=fullname,
+                                username=username,
+                                userid=userid,
+                                my_first=my_first,
+                                my_last=my_last,
+                                my_fullname=my_fullname,
+                                my_username=my_username,
+                                my_mention=my_mention,
+                            ),
+                        )
     except AttributeError:
         pass
 
