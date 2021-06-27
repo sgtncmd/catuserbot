@@ -29,7 +29,6 @@ async def _(event):
             "`You need to set the required ENV variables for this module. \nModule stopping`",
         )
     start = datetime.now()
-    event.pattern_match.group(1)
     lan = "en"
     if not os.path.isdir(Config.TEMP_DIR):
         os.makedirs(Config.TEMP_DIR)
