@@ -16,18 +16,18 @@ plugin_category = "utils"
 
 
 @catub.cat_cmd(incoming=True)
-async def filter_incoming_handler(handler):
+async def filter_incoming_handler(handler):  # sourcery no-metrics
     try:
         if (handler.sender_id) != handler.client.uid:
             name = handler.raw_text
             filters = get_filters(handler.chat_id)
             if not filters:
                 return
-            a_user = await event.get_user()
-            chat = await event.get_chat()
-            me = await event.client.get_me()
+            a_user = await handler.get_user()
+            chat = await handler.get_chat()
+            me = await handler.client.get_me()
             title = chat.title or "this chat"
-            participants = await event.client.get_participants(chat)
+            participants = await handler.client.get_participants(chat)
             count = len(participants)
             mention = f"[{a_user.first_name}](tg://user?id={a_user.id})"
             my_mention = f"[{me.first_name}](tg://user?id={me.id})"
