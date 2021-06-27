@@ -5,9 +5,10 @@ from datetime import datetime
 import requests
 
 from userbot import catub
-from ..helpers import media_type
+
 from ..Config import Config
 from ..core.managers import edit_delete, edit_or_reply
+from ..helpers import media_type
 
 plugin_category = "utils"
 
@@ -23,19 +24,21 @@ plugin_category = "utils"
 async def _(event):
     "speech to text."
     if Config.IBM_WATSON_CRED_URL is None or Config.IBM_WATSON_CRED_PASSWORD is None:
-        return await edit_delete(event,
-            "`You need to set the required ENV variables for this module. \nModule stopping`"
+        return await edit_delete(
+            event,
+            "`You need to set the required ENV variables for this module. \nModule stopping`",
         )
     start = datetime.now()
-    input_str = event.pattern_match.group(1)
-    lan ="en"
+    event.pattern_match.group(1)
+    lan = "en"
     if not os.path.isdir(Config.TEMP_DIR):
         os.makedirs(Config.TEMP_DIR)
     reply = await event.get_reply_message()
     mediatype = media_type(reply)
     if not reply or (mediatype and mediatype not in ["Voice", "Audio"]):
         return await edit_delete(
-            event, "`Reply to a voice message or Audio, to get the relevant transcript.`"
+            event,
+            "`Reply to a voice message or Audio, to get the relevant transcript.`",
         )
     catevent = await edit_or_reply(event, "`Downloading to my local, for analysis  🙇`")
     required_file_name = await event.client.download_media(
