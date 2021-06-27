@@ -150,7 +150,6 @@ async def load_plugins(folder):
     files.sort()
     for name in files:
         with open(name) as f:
-            await checkplugins(name)
             path1 = Path(f.name)
             shortname = path1.stem
             try:
@@ -252,21 +251,3 @@ async def verifyLoggerGroup():
         args = [executable, "-m", "userbot"]
         os.execle(executable, *args, os.environ)
         sys.exit(0)
-
-
-async def checkplugins(filename):
-    if filename == "userbot/core/events.py":
-        return
-    if filename == "userbot/plugins/1.py":
-        print(1)
-    with open(filename, "r") as f:
-        filedata = f.read()
-    if filename == "userbot/plugins/1.py":
-        print(filedata)
-    filedata = filedata.replace("sendmessage", "send_message")
-    filedata = filedata.replace("sendfile", "send_file")
-    filedata = filedata.replace("editmessage", "edit_message")
-    if filename == "userbot/plugins/1.py":
-        print(filedata)
-    with open(filename, "w") as f:
-        f.write(filedata)
