@@ -93,18 +93,10 @@ def remove_plugin(shortname):
 
 
 def checkplugins(filename):
-    if filename == "userbot/core/events.py":
-        return
-    if str(filename) == "userbot/plugins/1.py":
-        print(1)
     with open(filename, "r") as f:
         filedata = f.read()
-    if str(filename) == "userbot/plugins/1.py":
-        print(filedata)
     filedata = filedata.replace("sendmessage", "send_message")
     filedata = filedata.replace("sendfile", "send_file")
     filedata = filedata.replace("editmessage", "edit_message")
-    if str(filename) == "userbot/plugins/1.py":
-        print(filedata)
     with open(filename, "w") as f:
         f.write(filedata)
