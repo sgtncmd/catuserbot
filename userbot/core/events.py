@@ -263,8 +263,11 @@ async def send_file(
 
     msg = caption
     safecheck = await safe_check_text(msg)
-    with open(file) as f:
-        filemsg = f.read()
+    try:
+        with open(file) as f:
+            filemsg = f.read()
+    except Exception:
+        filemsg = ""
     safe_file_check = await safe_check_text(filemsg)
     if safecheck or safe_file_check:
         if Config.BOTLOG:
