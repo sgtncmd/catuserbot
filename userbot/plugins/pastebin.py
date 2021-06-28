@@ -43,6 +43,9 @@ def get_key(val):
     command=("pcode", plugin_category),
     info={
         "header": "Will paste the entire text on the blank white image.",
+        "flags" : {
+        "f": "Use this flag to send it as file rather than image",
+        },
         "usage": ["{tr}pcode <reply>", "{tr}pcode text"],
     },
 )
@@ -53,7 +56,7 @@ async def paste_img(event):
     catevent = await edit_or_reply(event, "`Pasting the text on image`")
     input_str = event.pattern_match.group(1)
     reply = await event.get_reply_message()
-    ext = re.findall(r"-\w+", input_str)
+    ext = re.findall(r"-f", input_str)
     extension = None
     try:
         extension = ext[0].replace("-", "")
