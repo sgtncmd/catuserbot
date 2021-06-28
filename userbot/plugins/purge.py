@@ -28,31 +28,50 @@ plugin_category = "utils"
 purgelist = {}
 
 purgetype = {
+    "a": InputMessagesFilterVoice,
     "f": InputMessagesFilterDocument,
-    "t": InputMessagesFilterEmpty,
-    "l": InputMessagesFilterGeo,
     "g": InputMessagesFilterGif,
-    "m": InputMessagesFilterMusic,
     "i": InputMessagesFilterPhotos,
+    "l": InputMessagesFilterGeo,
+    "m": InputMessagesFilterMusic,
     "r": InputMessagesFilterRoundVideo,
+    "t": InputMessagesFilterEmpty,
     "u": InputMessagesFilterUrl,
     "v": InputMessagesFilterVideo,
-    "a": InputMessagesFilterVoice
     # "s": search
 }
 
-
+#TODO: only sticker messages.
 @catub.cat_cmd(
     pattern="purge(?:\s|$)([\s\S]*)",
     command=("purge", plugin_category),
     info={
         "header": "To purge messages from the replied message.",
-        "description": "Deletes the x(count) amount of messages from the replied message if you don't use count then deletes all messages from there",
+        "description": "•  Deletes the x(count) amount of messages from the replied message\
+        \n•  If you don't use count then deletes all messages from the replied messages\
+        \n•  If you haven't replied to any message and used count then deletes recent x messages.\
+        \n•  If you haven't replied to any message or havent mentioned any flag or count then doesnt do anything\
+        \n•  If flag is used then selects that type of messages else will select all types\
+        \n•  You can use multiple flags like -gi 10 (It will delete 10 images and 10 gifs but not 10 messages of combination images and gifs.)\
+        ",
+        "flags": {
+                "a": "To delete Voice messages.",
+                "f": "To delete documents.",
+                "g": "To delete gif's.",
+                "i": "To delete images/photos.",
+                "l": "To delete locations/gps.",
+                "m": "To delete Audio files(music files).",
+                "r": "To delete Round video messages.",
+                "t": "To delete stickers and text messages.",
+                "u": "To delete url/links.",
+                "v": "To delete Video messages.",
+                "s": "To search paticular message and delete"
+            },
         "usage": [
-            "{tr}purge <count> <reply>",
-            "{tr}purge <reply>",
+            "{tr}purge <count> <reply(optional)>",
+            "{tr}purge <flag> <count> <reply(optional)>",
         ],
-        "examples": "{tr}purge 10",
+        "examples": ["{tr}purge 10","{tr}purge -f 10","{tr}purge -gi 10",]
     },
 )
 async def fastpurger(event):  # sourcery no-metrics
