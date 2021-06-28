@@ -536,7 +536,7 @@ async def fastpurger(event):  # sourcery no-metrics
                 async for msg in event.client.iter_messages(
                     event.chat_id,
                     limit=int(input_str),
-                    offset_id=reply.id-1,
+                    offset_id=reply.id - 1,
                     reverse=True,
                     from_user=reply.sender_id,
                 ):
