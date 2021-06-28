@@ -181,7 +181,7 @@ async def fastpurger(event):  # sourcery no-metrics
             for ty in p_type:
                 if ty in purgetype:
                     async for msg in event.client.iter_messages(
-                        event.chat_id, limit=int(input_str)+1, filter=purgetype[ty]
+                        event.chat_id, limit=int(input_str) + 1, filter=purgetype[ty]
                     ):
                         count += 1
                         msgs.append(msg)
@@ -204,7 +204,7 @@ async def fastpurger(event):  # sourcery no-metrics
             inputstr = inputstr.strip()
             if count.isnumeric():
                 async for msg in event.client.iter_messages(
-                    event.chat_id, limit=int(count)+1, search=inputstr
+                    event.chat_id, limit=int(count) + 1, search=inputstr
                 ):
                     count += 1
                     msgs.append(msg)
@@ -240,7 +240,7 @@ async def fastpurger(event):  # sourcery no-metrics
             else:
                 error += f"\n• `{ty}` __is Invalid flag.__"
     elif input_str.isnumeric():
-        async for msg in event.client.iter_messages(chat, limit=int(input_str)+1):
+        async for msg in event.client.iter_messages(chat, limit=int(input_str) + 1):
             count += 1
             msgs.append(msg)
             if len(msgs) == 50:
