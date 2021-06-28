@@ -111,16 +111,16 @@ async def fastpurger(event):  # sourcery no-metrics
         elif input_str and p_type is not None:
             if p_type == "s":
                 try:
-                    count, inputstr = input_str.split(" ")
+                    cont, inputstr = input_str.split(" ")
                 except ValueError:
-                    count = "error"
+                    cont = "error"
                     inputstr = input_str
-                count = count.strip()
+                cont = cont.strip()
                 inputstr = inputstr.strip()
-                if count.isnumeric():
+                if cont.isnumeric():
                     async for msg in event.client.iter_messages(
                         event.chat_id,
-                        limit=int(count),
+                        limit=int(cont),
                         offset_id=reply.id - 1,
                         reverse=True,
                         search=inputstr,
@@ -196,15 +196,15 @@ async def fastpurger(event):  # sourcery no-metrics
                     error += f"\n• `{ty}` __is Invalid flag.__"
         elif p_type == "s":
             try:
-                count, inputstr = input_str.split(" ")
+                cont, inputstr = input_str.split(" ")
             except ValueError:
-                count = "error"
+                cont = "error"
                 inputstr = input_str
-            count = count.strip()
+            cont = cont.strip()
             inputstr = inputstr.strip()
-            if count.isnumeric():
+            if cont.isnumeric():
                 async for msg in event.client.iter_messages(
-                    event.chat_id, limit=int(count), search=inputstr
+                    event.chat_id, limit=int(cont), search=inputstr
                 ):
                     count += 1
                     msgs.append(msg)
