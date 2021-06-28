@@ -1,6 +1,6 @@
 # Userbot module for purging unneeded messages(usually spam or ot).
 from asyncio import sleep
-
+import re
 from telethon.errors import rpcbaseerrors
 from telethon.tl.types import (
     InputMessagesFilterDocument,
