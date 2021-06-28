@@ -3,6 +3,8 @@ from asyncio import sleep
 
 from telethon.errors import rpcbaseerrors
 
+from telethon.tl.types import InputMessagesFilterDocument, InputMessagesFilterGif, InputMessagesFilterMusic, InputMessagesFilterPhotos, InputMessagesFilterUrl
+from telethon.tl.types import InputMessagesFilterEmpty,InputMessagesFilterGeo, InputMessagesFilterRoundVideo, InputMessagesFilterVideo, InputMessagesFilterVoice
 from userbot import catub
 
 from ..core.managers import edit_delete, edit_or_reply
@@ -14,6 +16,19 @@ plugin_category = "utils"
 
 purgelist = {}
 
+purgetype = {
+    "f": InputMessagesFilterDocument,
+    "t": InputMessagesFilterEmpty,
+    "l": InputMessagesFilterGeo,
+    "g": InputMessagesFilterGif,
+    "m": InputMessagesFilterMusic,
+    "i": InputMessagesFilterPhotos,
+    "r": InputMessagesFilterRoundVideo,
+    "u": InputMessagesFilterUrl,
+    "v": InputMessagesFilterVideo,
+    "a": InputMessagesFilterVoice
+    # "s": search
+}
 
 @catub.cat_cmd(
     pattern="purge(?:\s|$)([\s\S]*)",
@@ -28,59 +43,224 @@ purgelist = {}
         "examples": "{tr}purge 10",
     },
 )
-async def fastpurger(event):
+async def fastpurger(event):    # sourcery no-metrics
     "To purge messages from the replied message"
     chat = await event.get_input_chat()
     msgs = []
     count = 0
     input_str = event.pattern_match.group(1)
+    ptype = re.findall(r"-\w+", input_str)
+    try:
+        p_type = ptype[0].replace("-", "")
+        input_str = input_str.replace(ptype[0], "").strip()
+    except IndexError:
+        p_type = None
+    error = ""
+    result = ""
     reply = await event.get_reply_message()
     if reply:
         if input_str and input_str.isnumeric():
-            count += 1
-            async for msg in event.client.iter_messages(
-                event.chat_id,
-                limit=(int(input_str) - 1),
-                offset_id=reply.id,
-                reverse=True,
-            ):
-                msgs.append(msg)
+            if p_type is not None:
+                for ty in p_type:
+                    if ty in purgetype:
+                        async for msg in event.client.iter_messages(
+                            event.chat_id,
+                            limit=int(input_str),
+                            offset_id=reply.id-1,
+                            reverse=True,
+                            filter = purgetype[ty]
+                        ):
+                            count += 1
+                            msgs.append(msg)
+                            if len(msgs) == 50:
+                                await event.client.delete_messages(chat, msgs)
+                                msgs = []
+                        if msgs:
+                            await event.client.delete_messages(chat, msgs)
+                    elif ty =="s":
+                        error += f"\n• __You can't use s flag along with otherflags.__"
+                    else:
+                        error += f"\n• `{ty}` __is Invalid flag.__"
+            else:
                 count += 1
-                msgs.append(event.reply_to_msg_id)
-                if len(msgs) == 100:
+                async for msg in event.client.iter_messages(
+                    event.chat_id,
+                    limit=(int(input_str) - 1),
+                    offset_id=reply.id,
+                    reverse=True,
+                ):
+                    msgs.append(msg)
+                    count += 1
+                    if len(msgs) == 50:
+                        await event.client.delete_messages(chat, msgs)
+                        msgs = []
+                if msgs:
                     await event.client.delete_messages(chat, msgs)
-                    msgs = []
+        elif input_str and p_type is not None:
+            if p_type =="s":
+                try:
+                    count,inputstr = input_str.split(" ")
+                except ValueError:
+                    count = "error"
+                    inputstr = input_str
+                count = count.strip()
+                inputstr = inputstr.strip()
+                if count.isnumeric():
+                    async for msg in event.client.iter_messages(
+                            event.chat_id,
+                            limit=int(count),
+                            offset_id=reply.id-1,
+                            reverse=True,
+                            search = inputstr
+                        ):
+                            count += 1
+                            msgs.append(msg)
+                            if len(msgs) == 50:
+                                await event.client.delete_messages(chat, msgs)
+                                msgs = []
+                else:
+                    async for msg in event.client.iter_messages(
+                            event.chat_id,
+                            offset_id=reply.id-1,
+                            reverse=True,
+                            search = input_str
+                        ):
+                            count += 1
+                            msgs.append(msg)
+                            if len(msgs) == 50:
+                                await event.client.delete_messages(chat, msgs)
+                                msgs = []
+                if msgs:
+                    await event.client.delete_messages(chat, msgs)
+            else:
+                error += f"\n• `{ty}` __is Invalid flag.__"
         elif input_str:
-            return await edit_or_reply(
-                event, f"**Error**\n`{input_str} is not an integer. Use proper syntax.`"
-            )
+            error += f"\n• `.{purge} {input_str}` __is invalid syntax try again by reading__ `.help -c purge`"
+        elif p_type is not None:
+            for ty in p_type:
+                if ty in purgetype:
+                    async for msg in event.client.iter_messages(
+                        event.chat_id,
+                        min_id=event.reply_to_msg_id -1,
+                        filter = purgetype[ty]
+                    ):
+                        count += 1
+                        msgs.append(msg)
+                        if len(msgs) == 50:
+                            await event.client.delete_messages(chat, msgs)
+                            msgs = []
+                    if msgs:
+                        await event.client.delete_messages(chat, msgs)
+                else:
+                    error += f"\n• `{ty}` __is Invalid flag.__"
         else:
             async for msg in event.client.iter_messages(
-                chat, min_id=event.reply_to_msg_id
+                chat, min_id=event.reply_to_msg_id -1
             ):
-                msgs.append(msg)
                 count += 1
-                msgs.append(event.reply_to_msg_id)
-                if len(msgs) == 100:
+                msgs.append(msg)
+                if len(msgs) == 50:
                     await event.client.delete_messages(chat, msgs)
                     msgs = []
+            if msgs:
+                await event.client.delete_messages(chat, msgs)
+    elif p_type is not None and input_str:
+        if p_type != "s" and input_str.isnumeric():
+            for ty in p_type:
+                if ty in purgetype:
+                    async for msg in event.client.iter_messages(
+                        event.chat_id,
+                        limit=int(input_str),
+                        filter = purgetype[ty]
+                    ):
+                        count += 1
+                        msgs.append(msg)
+                        if len(msgs) == 50:
+                            await event.client.delete_messages(chat, msgs)
+                            msgs = []
+                    if msgs:
+                        await event.client.delete_messages(chat, msgs)
+                elif ty =="s":
+                    error += f"\n• __You can't use s flag along with otherflags.__"
+                else:
+                    error += f"\n• `{ty}` __is Invalid flag.__"
+        elif p_type =="s":
+            try:
+                count,inputstr = input_str.split(" ")
+            except ValueError:
+                count = "error"
+                inputstr = input_str
+            count = count.strip()
+            inputstr = inputstr.strip()
+            if count.isnumeric():
+                async for msg in event.client.iter_messages(
+                        event.chat_id,
+                        limit=int(count),
+                        search = inputstr
+                    ):
+                        count += 1
+                        msgs.append(msg)
+                        if len(msgs) == 50:
+                            await event.client.delete_messages(chat, msgs)
+                            msgs = []
+            else:
+                async for msg in event.client.iter_messages(
+                        event.chat_id,
+                        search = input_str
+                    ):
+                        count += 1
+                        msgs.append(msg)
+                        if len(msgs) == 50:
+                            await event.client.delete_messages(chat, msgs)
+                            msgs = []
+            if msgs:
+                await event.client.delete_messages(chat, msgs)
+        else:
+            error += f"\n• `{ty}` __is Invalid flag.__"
+    elif p_type is not None:
+        for ty in p_type:
+                if ty in purgetype:
+                    async for msg in event.client.iter_messages(
+                        event.chat_id,
+                        filter = purgetype[ty]
+                    ):
+                        count += 1
+                        msgs.append(msg)
+                        if len(msgs) == 50:
+                            await event.client.delete_messages(chat, msgs)
+                            msgs = []
+                    if msgs:
+                        await event.client.delete_messages(chat, msgs)
+                else:
+                    error += f"\n• `{ty}` __is Invalid flag.__"
+    elif input_str.isnumeric():
+        async for msg in event.client.iter_messages(
+                chat,limit = int(input_str)
+            ):
+                count += 1
+                msgs.append(msg)
+                if len(msgs) == 50:
+                    await event.client.delete_messages(chat, msgs)
+                    msgs = []
+        if msgs:
+                await event.client.delete_messages(chat, msgs)
     else:
-        await edit_or_reply(
-            event,
-            "`No message specified.`",
-        )
-        return
+        error += "•  __Nothing is specified Recheck the help__ (`.help -c purge`)"
+    await event.delete()
     if msgs:
         await event.client.delete_messages(chat, msgs)
-    await event.delete()
+    if count >0:
+        result += "`Fast purge complete!\nPurged " + str(count) + " messages.`",
+    if error != "":
+        result + f"\n\n**Error:**{error}"
     hi = await event.client.send_message(
         event.chat_id,
-        "`Fast purge complete!\nPurged " + str(count) + " messages.`",
+        result
     )
     if BOTLOG:
         await event.client.send_message(
             BOTLOG_CHATID,
-            "#PURGE \n`Purge of " + str(count) + " messages done successfully.`",
+            f"#PURGE \n{result}",
         )
     await sleep(5)
     await hi.delete()
