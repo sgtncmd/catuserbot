@@ -259,7 +259,7 @@ async def fastpurger(event):  # sourcery no-metrics
         result += "__Fast purge complete!\nPurged __`" + str(count) + "` __messages.__"
     if error != "":
         result += f"\n\n**Error:**{error}"
-    if result =="":
+    if result == "":
         result += "There are no messages to purge."
     hi = await event.client.send_message(event.chat_id, result)
     if BOTLOG:
