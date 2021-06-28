@@ -508,7 +508,7 @@ async def fastpurger(event):  # sourcery no-metrics
     reply = await event.get_reply_message()
     if not reply:
         return await edit_delete(event, "Works only if you reply to user message.")
-    if flag:
+    if not flag:
         if input_str and input_str.isnumeric():
             if p_type is not None:
                 for ty in p_type:
@@ -533,11 +533,10 @@ async def fastpurger(event):  # sourcery no-metrics
                     else:
                         error += f"\n• `{ty}` __is Invalid flag.__"
             else:
-                count += 1
                 async for msg in event.client.iter_messages(
                     event.chat_id,
-                    limit=(int(input_str) - 1),
-                    offset_id=reply.id,
+                    limit=int(input_str),
+                    offset_id=reply.id-1,
                     reverse=True,
                     from_user=reply.sender_id,
                 ):
@@ -699,7 +698,7 @@ async def fastpurger(event):  # sourcery no-metrics
     elif input_str.isnumeric():
         async for msg in event.client.iter_messages(
             chat,
-            limit=int(input_str) + 1,
+            limit=int(input_str),
             from_user=reply.sender_id,
         ):
             count += 1
@@ -723,7 +722,7 @@ async def fastpurger(event):  # sourcery no-metrics
     if BOTLOG:
         await event.client.send_message(
             BOTLOG_CHATID,
-            f"#PURGE \n{result}",
+            f"#UPURGE \n{result}",
         )
     await sleep(5)
     await hi.delete()
