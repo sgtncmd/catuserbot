@@ -465,7 +465,7 @@ async def fastpurger(event):  # sourcery no-metrics
         ",
         "flags": {
             "a": "To delete all messages of replied user.",
-            "s": "To delete all messages of replied user with the given query."
+            "s": "To delete all messages of replied user with the given query.",
         },
         "usage": [
             "{tr}upurge <count> <reply>",
@@ -497,32 +497,34 @@ async def fast_purger(event):  # sourcery no-metrics
     await event.delete()
     reply = await event.get_reply_message()
     if not reply or reply.sender_id is None:
-        return await edit_delete(event, "**Error**\n__This cmd Works only if you reply to user message.__")
+        return await edit_delete(
+            event, "**Error**\n__This cmd Works only if you reply to user message.__"
+        )
     if not flag:
-        if input_str and p_type =="s":
-                async for msg in event.client.iter_messages(
-                        event.chat_id,
-                        search=input_str,
-                        from_user=reply.sender_id,
-                    ):
-                        count += 1
-                        msgs.append(msg)
-                        if len(msgs) == 50:
-                            await event.client.delete_messages(chat, msgs)
-                            msgs = []
+        if input_str and p_type == "s":
+            async for msg in event.client.iter_messages(
+                event.chat_id,
+                search=input_str,
+                from_user=reply.sender_id,
+            ):
+                count += 1
+                msgs.append(msg)
+                if len(msgs) == 50:
+                    await event.client.delete_messages(chat, msgs)
+                    msgs = []
         elif input_str and input_str.isnumeric():
             async for msg in event.client.iter_messages(
-                    event.chat_id,
-                    limit=int(input_str),
-                    offset_id=reply.id - 1,
-                    reverse=True,
-                    from_user=reply.sender_id,
-                ):
-                    msgs.append(msg)
-                    count += 1
-                    if len(msgs) == 50:
-                        await event.client.delete_messages(chat, msgs)
-                        msgs = []
+                event.chat_id,
+                limit=int(input_str),
+                offset_id=reply.id - 1,
+                reverse=True,
+                from_user=reply.sender_id,
+            ):
+                msgs.append(msg)
+                count += 1
+                if len(msgs) == 50:
+                    await event.client.delete_messages(chat, msgs)
+                    msgs = []
         elif input_str:
             error += f"\n• `.upurge {input_str}` __is invalid syntax try again by reading__ `.help -c purge`"
         else:
