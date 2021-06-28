@@ -41,7 +41,7 @@ purgetype = {
     # "s": search
 }
 
-#TODO: only sticker messages.
+# TODO: only sticker messages.
 @catub.cat_cmd(
     pattern="purge(?:\s|$)([\s\S]*)",
     command=("purge", plugin_category),
@@ -55,23 +55,27 @@ purgetype = {
         \n•  You can use multiple flags like -gi 10 (It will delete 10 images and 10 gifs but not 10 messages of combination images and gifs.)\
         ",
         "flags": {
-                "a": "To delete Voice messages.",
-                "f": "To delete documents.",
-                "g": "To delete gif's.",
-                "i": "To delete images/photos.",
-                "l": "To delete locations/gps.",
-                "m": "To delete Audio files(music files).",
-                "r": "To delete Round video messages.",
-                "t": "To delete stickers and text messages.",
-                "u": "To delete url/links.",
-                "v": "To delete Video messages.",
-                "s": "To search paticular message and delete"
-            },
+            "a": "To delete Voice messages.",
+            "f": "To delete documents.",
+            "g": "To delete gif's.",
+            "i": "To delete images/photos.",
+            "l": "To delete locations/gps.",
+            "m": "To delete Audio files(music files).",
+            "r": "To delete Round video messages.",
+            "t": "To delete stickers and text messages.",
+            "u": "To delete url/links.",
+            "v": "To delete Video messages.",
+            "s": "To search paticular message and delete",
+        },
         "usage": [
             "{tr}purge <count> <reply(optional)>",
             "{tr}purge <flag> <count> <reply(optional)>",
         ],
-        "examples": ["{tr}purge 10","{tr}purge -f 10","{tr}purge -gi 10",]
+        "examples": [
+            "{tr}purge 10",
+            "{tr}purge -f 10",
+            "{tr}purge -gi 10",
+        ],
     },
 )
 async def fastpurger(event):  # sourcery no-metrics
