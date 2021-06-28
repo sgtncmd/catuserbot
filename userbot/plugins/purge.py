@@ -204,7 +204,7 @@ async def fastpurger(event):  # sourcery no-metrics
             inputstr = inputstr.strip()
             if count.isnumeric():
                 async for msg in event.client.iter_messages(
-                    event.chat_id, limit=int(count) , search=inputstr
+                    event.chat_id, limit=int(count), search=inputstr
                 ):
                     count += 1
                     msgs.append(msg)
