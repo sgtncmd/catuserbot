@@ -147,7 +147,7 @@ async def fastpurger(event):  # sourcery no-metrics
             else:
                 error += f"\n• `{ty}` __is Invalid flag.__"
         elif input_str:
-            error += f"\n• `.{purge} {input_str}` __is invalid syntax try again by reading__ `.help -c purge`"
+            error += f"\n• `.purge {input_str}` __is invalid syntax try again by reading__ `.help -c purge`"
         elif p_type is not None:
             for ty in p_type:
                 if ty in purgetype:
