@@ -237,7 +237,7 @@ async def fastpurger(event):  # sourcery no-metrics
                         msgs = []
                 if msgs:
                     await event.client.delete_messages(chat, msgs)
-            elif ty =="s":
+            elif ty == "s":
                 error += f"\n• __You can't use s with other flags or you haven't given search query.__"
             else:
                 error += f"\n• `{ty}` __is Invalid flag.__"
