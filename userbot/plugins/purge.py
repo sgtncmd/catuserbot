@@ -249,7 +249,7 @@ async def fastpurger(event):  # sourcery no-metrics
         if msgs:
             await event.client.delete_messages(chat, msgs)
     else:
-        error += "•  __Nothing is specified Recheck the help__ (`.help -c purge`)"
+        error += "\n•  __Nothing is specified Recheck the help__ (`.help -c purge`)"
     await event.delete()
     if msgs:
         await event.client.delete_messages(chat, msgs)
