@@ -41,6 +41,7 @@ purgetype = {
     # "s": search
 }
 
+
 @catub.cat_cmd(
     pattern="del(\s*| \d+)$",
     command=("del", plugin_category),
@@ -86,6 +87,7 @@ async def delete_it(event):
                 await edit_or_reply(event, "`Well, I can't delete a message`")
     elif not input_str:
         await event.delete()
+
 
 @catub.cat_cmd(
     pattern="purgefrom$",
@@ -449,6 +451,7 @@ async def fastpurger(event):  # sourcery no-metrics
     await sleep(5)
     await hi.delete()
 
+
 @catub.cat_cmd(
     pattern="upurge(all)?(?:\s|$)([\s\S]*)",
     command=("upurge", plugin_category),
@@ -473,7 +476,7 @@ async def fastpurger(event):  # sourcery no-metrics
             "u": "To delete url/links.",
             "v": "To delete Video messages.",
             "s": "To search paticular message and delete",
-            "all": "to delete all flagged messages for this u need to use .upurgeall"
+            "all": "to delete all flagged messages for this u need to use .upurgeall",
         },
         "usage": [
             "{tr}upurge <count> <reply>",
@@ -607,7 +610,9 @@ async def fastpurger(event):  # sourcery no-metrics
                     error += f"\n• `{ty}` __is Invalid flag.__"
         else:
             async for msg in event.client.iter_messages(
-                chat, min_id=event.reply_to_msg_id - 1,from_user=reply.sender_id,
+                chat,
+                min_id=event.reply_to_msg_id - 1,
+                from_user=reply.sender_id,
             ):
                 count += 1
                 msgs.append(msg)
@@ -621,7 +626,10 @@ async def fastpurger(event):  # sourcery no-metrics
             for ty in p_type:
                 if ty in purgetype:
                     async for msg in event.client.iter_messages(
-                        event.chat_id, limit=int(input_str), filter=purgetype[ty],from_user=reply.sender_id,
+                        event.chat_id,
+                        limit=int(input_str),
+                        filter=purgetype[ty],
+                        from_user=reply.sender_id,
                     ):
                         count += 1
                         msgs.append(msg)
@@ -644,7 +652,10 @@ async def fastpurger(event):  # sourcery no-metrics
             inputstr = inputstr.strip()
             if cont.isnumeric():
                 async for msg in event.client.iter_messages(
-                    event.chat_id, limit=int(cont), search=inputstr,from_user=reply.sender_id,
+                    event.chat_id,
+                    limit=int(cont),
+                    search=inputstr,
+                    from_user=reply.sender_id,
                 ):
                     count += 1
                     msgs.append(msg)
@@ -653,7 +664,9 @@ async def fastpurger(event):  # sourcery no-metrics
                         msgs = []
             else:
                 async for msg in event.client.iter_messages(
-                    event.chat_id, search=input_str,from_user=reply.sender_id,
+                    event.chat_id,
+                    search=input_str,
+                    from_user=reply.sender_id,
                 ):
                     count += 1
                     msgs.append(msg)
@@ -668,7 +681,9 @@ async def fastpurger(event):  # sourcery no-metrics
         for ty in p_type:
             if ty in purgetype:
                 async for msg in event.client.iter_messages(
-                    event.chat_id, filter=purgetype[ty],from_user=reply.sender_id,
+                    event.chat_id,
+                    filter=purgetype[ty],
+                    from_user=reply.sender_id,
                 ):
                     count += 1
                     msgs.append(msg)
@@ -682,7 +697,11 @@ async def fastpurger(event):  # sourcery no-metrics
             else:
                 error += f"\n• `{ty}` __is Invalid flag.__"
     elif input_str.isnumeric():
-        async for msg in event.client.iter_messages(chat, limit=int(input_str) + 1,from_user=reply.sender_id,):
+        async for msg in event.client.iter_messages(
+            chat,
+            limit=int(input_str) + 1,
+            from_user=reply.sender_id,
+        ):
             count += 1
             msgs.append(msg)
             if len(msgs) == 50:
