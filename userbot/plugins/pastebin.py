@@ -53,7 +53,7 @@ async def paste_img(event):
     catevent = await edit_or_reply(event, "`Pasting the text on image`")
     input_str = event.pattern_match.group(1)
     reply = await event.get_reply_message()
-    ext = re.findall(r"-f", input_str)
+    ext = re.findall(r"-\w+", input_str)
     extension = None
     try:
         extension = ext[0].replace("-", "")
