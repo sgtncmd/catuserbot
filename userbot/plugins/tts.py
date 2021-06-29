@@ -34,12 +34,12 @@ async def _(event):
     input_str = event.pattern_match.group(1)
     start = datetime.now()
     reply_to_id = await reply_id(event)
-    if event.reply_to_msg_id:
+    if ";" in input_str:
+        lan, text = input_str.split(";")
+    elif event.reply_to_msg_id:
         previous_message = await event.get_reply_message()
         text = previous_message.message
         lan = input_str or "en"
-    elif ";" in input_str:
-        lan, text = input_str.split(";")
     else:
         if not input_str:
             return await edit_or_reply(event, "Invalid Syntax. Module stopping.")
