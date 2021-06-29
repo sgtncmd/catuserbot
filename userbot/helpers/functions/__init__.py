@@ -6,3 +6,4 @@ from .nekos import *
 from .utils import *
 from .utube import *
 from .vidtools import *
+from .findquote import *
