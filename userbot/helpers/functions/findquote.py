@@ -22,7 +22,7 @@ async def random_quote():
 
 
 async def search_quotes(query):
-    page = random.randint(1, 5)
-    quoteurl = f"https://www.goodreads.com/quotes/search?commit=Search&page={page}&q={query.replace(' ', '+')}&utf8=%E2%9C%93"
+    pgno = random.randint(1, 5)
+    quoteurl = f"https://www.goodreads.com/quotes/search?commit=Search&page={pgno}&q={query.replace(' ', '+')}&utf8=%E2%9C%93"
     results = await extract_quote(quoteurl)
     return random.choice(results)
