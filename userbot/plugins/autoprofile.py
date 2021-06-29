@@ -106,29 +106,31 @@ async def autopicloop():
             return
         AUTOPICSTART = gvarstatus("autopic") == "true"
 
+
 async def custompfploop():
-        CUSTOMPICSTART = gvarstatus("CUSTOM_PFP") == "true"
-        i = 0
-        while CUSTOMPICSTART:
-            if len(get_collection_list("CUSTOM_PFP_LINKS")) == 0:
-                LOGS.error("No custom pfp images to set.")
-            pic = random.choice(list(get_collection_list("CUSTOM_PFP_LINKS")))
-            urllib.request.urlretrieve(pic, "donottouch.jpg")
-            file = await catub.upload_file("donottouch.jpg")
-            try:
-                if i > 0:
-                    await catub(
-                        functions.photos.DeletePhotosRequest(
-                            await catub.get_profile_photos("me", limit=1)
-                        )
+    CUSTOMPICSTART = gvarstatus("CUSTOM_PFP") == "true"
+    i = 0
+    while CUSTOMPICSTART:
+        if len(get_collection_list("CUSTOM_PFP_LINKS")) == 0:
+            LOGS.error("No custom pfp images to set.")
+        pic = random.choice(list(get_collection_list("CUSTOM_PFP_LINKS")))
+        urllib.request.urlretrieve(pic, "donottouch.jpg")
+        file = await catub.upload_file("donottouch.jpg")
+        try:
+            if i > 0:
+                await catub(
+                    functions.photos.DeletePhotosRequest(
+                        await catub.get_profile_photos("me", limit=1)
                     )
-                i += 1
-                await catub(functions.photos.UploadProfilePhotoRequest(file))
-                os.remove("donottouch.jpg")
-                await asyncio.sleep(Config.CHANGE_TIME)
-            except BaseException:
-                return
-            CUSTOMPICSTART = gvarstatus("CUSTOM_PFP") == "true"
+                )
+            i += 1
+            await catub(functions.photos.UploadProfilePhotoRequest(file))
+            os.remove("donottouch.jpg")
+            await asyncio.sleep(Config.CHANGE_TIME)
+        except BaseException:
+            return
+        CUSTOMPICSTART = gvarstatus("CUSTOM_PFP") == "true"
+
 
 async def digitalpicloop():
     DIGITALPICSTART = gvarstatus("digitalpic") == "true"
@@ -485,31 +487,31 @@ async def useless(event):
         return await edit_delete(event, "`Custompfp haven't enabled`")
     reply = await event.get_reply_message()
     if not input_str and reply:
-            input_str = reply.text
+        input_str = reply.text
     if not input_str:
-            return await edit_delete(
-                event, "**ಠ∀ಠ  Reply to valid link or give valid link url as input...**"
-            )
+        return await edit_delete(
+            event, "**ಠ∀ಠ  Reply to valid link or give valid link url as input...**"
+        )
     extractor = URLExtract()
     plink = extractor.find_urls(input_str)
-    if len(plink) ==0:
+    if len(plink) == 0:
         return await edit_delete(
-                event, "**ಠ∀ಠ  Reply to valid link or give valid link url as input...**"
-            )
+            event, "**ಠ∀ಠ  Reply to valid link or give valid link url as input...**"
+        )
     if flag == "a":
-            for i in plink:
-                if not is_in_list("CUSTOM_PFP_LINKS", i):
-                    add_to_list("CUSTOM_PFP_LINKS", i)
-            await edit_delete(
-                event, f"**{len(plink)} pictures sucessfully added to custom pfps**"
-            )
+        for i in plink:
+            if not is_in_list("CUSTOM_PFP_LINKS", i):
+                add_to_list("CUSTOM_PFP_LINKS", i)
+        await edit_delete(
+            event, f"**{len(plink)} pictures sucessfully added to custom pfps**"
+        )
     elif flag == "d":
-            for i in plink:
-                if is_in_list("CUSTOM_PFP_LINKS", i):
-                    rm_from_list("CUSTOM_PFP_LINKS", i)
-            await edit_delete(
-                event, f"**{len(plink)} pictures sucessfully removed from custom pfps**"
-            )
+        for i in plink:
+            if is_in_list("CUSTOM_PFP_LINKS", i):
+                rm_from_list("CUSTOM_PFP_LINKS", i)
+        await edit_delete(
+            event, f"**{len(plink)} pictures sucessfully removed from custom pfps**"
+        )
 
 
 @catub.cat_cmd(
