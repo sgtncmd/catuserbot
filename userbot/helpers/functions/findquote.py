@@ -9,7 +9,7 @@ async def extract_quote(url):
     request = requests.get(url).text
     soup = BeautifulSoup(request, "html.parser")
     for quote in soup.find_all("div", class_="quote"):
-        reponse = quote.find("div", {"class": "quoteText"}).text
+        response = quote.find("div", {"class": "quoteText"}).text
         results.append(response.replace("\n", " ").strip())
     return results
 
