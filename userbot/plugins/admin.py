@@ -624,7 +624,7 @@ async def pin(event):
     if BOTLOG and not event.is_private:
         await event.client.send_message(
             BOTLOG_CHATID,
-            "#UNPIN\
+            f"#UNPIN\
                 \n__Succesfully unpinned message(s) in chat__\
                 \nCHAT: {event.chat.title}(`{event.chat_id}`)",
         )
