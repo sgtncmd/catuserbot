@@ -1,3 +1,4 @@
+from .findquote import *
 from .functions import *
 from .ialivetext import *
 from .imgtools import *
@@ -6,4 +7,3 @@ from .nekos import *
 from .utils import *
 from .utube import *
 from .vidtools import *
-from .findquote import *
