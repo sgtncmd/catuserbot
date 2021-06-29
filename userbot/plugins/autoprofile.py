@@ -475,7 +475,8 @@ async def useless(event):  # sourcery no-metrics
         for i, each in enumerate(list_link, start=1):
             links += f"**{i}.**  {each}\n"
         await edit_delete(event, links, 60)
-    elif flag == "s":
+        return
+    if flag == "s":
         if gvarstatus("CUSTOM_PFP") is not None and gvarstatus("CUSTOM_PFP") == "true":
             delgvar("CUSTOM_PFP")
             await event.client(
