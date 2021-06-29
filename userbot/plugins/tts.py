@@ -18,7 +18,7 @@ plugin_category = "utils"
 
 
 @catub.cat_cmd(
-    pattern="tts ([\s\S]*)",
+    pattern="tts(?:\s|$)([\s\S]*)",
     command=("tts", plugin_category),
     info={
         "header": "Text to speech command.",
@@ -45,6 +45,7 @@ async def _(event):
             return await edit_or_reply(event, "Invalid Syntax. Module stopping.")
         text = input_str
         lan = "en"
+    catevent = await edit_or_reply(event,"`Recording......`")
     text = deEmojify(text.strip())
     lan = lan.strip()
     if not os.path.isdir("./temp/"):
@@ -73,7 +74,7 @@ async def _(event):
                 command_to_execute, stderr=subprocess.STDOUT
             )
         except (subprocess.CalledProcessError, NameError, FileNotFoundError) as exc:
-            await event.edit(str(exc))
+            await catevent.edit(str(exc))
             # continue sending required_file_name
         else:
             os.remove(required_file_name)
@@ -89,8 +90,8 @@ async def _(event):
         )
         os.remove(required_file_name)
         await edit_delete(
-            event,
+            catevent,
             "`Processed text {} into voice in {} seconds!`".format(text[0:20], ms),
         )
     except Exception as e:
-        await edit_or_reply(event, str(e))
+        await edit_or_reply(catevent, f"**Error:**\n`{str(e)}`")
