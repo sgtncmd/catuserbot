@@ -113,6 +113,7 @@ async def custompfploop():
     while CUSTOMPICSTART:
         if len(get_collection_list("CUSTOM_PFP_LINKS")) == 0:
             LOGS.error("No custom pfp images to set.")
+            return
         pic = random.choice(list(get_collection_list("CUSTOM_PFP_LINKS")))
         urllib.request.urlretrieve(pic, "donottouch.jpg")
         file = await catub.upload_file("donottouch.jpg")
