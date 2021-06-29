@@ -1,8 +1,7 @@
 from userbot import catub
 
 from ..core.managers import edit_delete, edit_or_reply
-from ..helpers.utils import _catutils, parse_pre
-from ..helpers.utils import yaml_format
+from ..helpers.utils import _catutils, parse_pre, yaml_format
 
 plugin_category = "tools"
 
@@ -74,7 +73,8 @@ async def _(event):
             event, "__Reply to text message to get text without markdown formating.__"
         )
     await edit_or_reply(event, reply.text, parse_mode=parse_pre)
-    
+
+
 @catub.cat_cmd(
     pattern="when$",
     command=("when", plugin_category),
@@ -92,5 +92,7 @@ async def _(event):
         except Exception:
             result = reply.date
     else:
-        result = event.date    
-    await edit_or_reply(event, f"**This message is posted on :**`{yaml_format(result)}`")    
+        result = event.date
+    await edit_or_reply(
+        event, f"**This message is posted on :**`{yaml_format(result)}`"
+    )
