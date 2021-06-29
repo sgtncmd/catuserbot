@@ -476,17 +476,17 @@ async def endmute(event):
             return
         # try:
         if is_muted(user.id, event.chat_id):
-                unmute(user.id, event.chat_id)
+            unmute(user.id, event.chat_id)
         else:
-                result = await event.client(
-                    functions.channels.GetParticipantRequest(
-                        channel=event.chat_id, user_id=user.id
-                    )
+            result = await event.client(
+                functions.channels.GetParticipantRequest(
+                    channel=event.chat_id, user_id=user.id
                 )
-                if result.participant.banned_rights.send_messages:
-                    await event.client(
-                        EditBannedRequest(event.chat_id, user.id, UNBAN_RIGHTS)
-                    )
+            )
+            if result.participant.banned_rights.send_messages:
+                await event.client(
+                    EditBannedRequest(event.chat_id, user.id, UNBAN_RIGHTS)
+                )
         # except AttributeError:
         #     return await edit_or_reply(
         #         event,
