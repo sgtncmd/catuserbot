@@ -1,14 +1,12 @@
 # inspired from uniborg Quotes plugin
 import random
 
-import requests
-
 from userbot import catub
 
 from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers import catmemes
-from ..helpers.functions import random_quote , search_quotes
+from ..helpers.functions import random_quote, search_quotes
 
 LOGS = logging.getLogger(__name__)
 plugin_category = "extra"
@@ -31,8 +29,7 @@ async def quote_search(event):
         response = await search_quotes(input_str) if input_str else await random_quote()
     except Exception:
         return await edit_delete(event, "`Sorry Zero results found`", 5)
-    await edit_or_reply(event,f"`{response['text']}`")
-        
+    await edit_or_reply(event, f"`{response['text']}`")
 
 
 @catub.cat_cmd(
