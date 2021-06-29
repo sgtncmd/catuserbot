@@ -474,10 +474,10 @@ async def endmute(event):
         user, _ = await get_user_from_event(event)
         if not user:
             return
-        try:
-            if is_muted(user.id, event.chat_id):
+        # try:
+        if is_muted(user.id, event.chat_id):
                 unmute(user.id, event.chat_id)
-            else:
+        else:
                 result = await event.client(
                     functions.channels.GetParticipantRequest(
                         channel=event.chat_id, user_id=user.id
@@ -487,13 +487,13 @@ async def endmute(event):
                     await event.client(
                         EditBannedRequest(event.chat_id, user.id, UNBAN_RIGHTS)
                     )
-        except AttributeError:
-            return await edit_or_reply(
-                event,
-                "`This user can already speak freely in this chat ~~lmfao sed rip~~`",
-            )
-        except Exception as e:
-            return await edit_or_reply(event, f"**Error : **`{str(e)}`")
+        # except AttributeError:
+        #     return await edit_or_reply(
+        #         event,
+        #         "`This user can already speak freely in this chat ~~lmfao sed rip~~`",
+        #     )
+        # except Exception as e:
+        #     return await edit_or_reply(event, f"**Error : **`{str(e)}`")
         await edit_or_reply(
             event,
             f"{_format.mentionuser(user.first_name ,user.id)} `is unmuted in {event.chat.title}\n乁( ◔ ౪◔)「    ┑(￣Д ￣)┍`",
