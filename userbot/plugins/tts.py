@@ -45,7 +45,7 @@ async def _(event):
             return await edit_or_reply(event, "Invalid Syntax. Module stopping.")
         text = input_str
         lan = "en"
-    catevent = await edit_or_reply(event,"`Recording......`")
+    catevent = await edit_or_reply(event, "`Recording......`")
     text = deEmojify(text.strip())
     lan = lan.strip()
     if not os.path.isdir("./temp/"):
