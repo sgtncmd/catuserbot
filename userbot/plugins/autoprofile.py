@@ -506,7 +506,7 @@ async def useless(event):  # sourcery no-metrics
         await edit_delete(
             event, f"**{len(plink)} pictures sucessfully added to custom pfps**"
         )
-    elif flag == "d":
+    elif flag == "r":
         for i in plink:
             if is_in_list("CUSTOM_PFP_LINKS", i):
                 rm_from_list("CUSTOM_PFP_LINKS", i)
