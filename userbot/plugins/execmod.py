@@ -94,5 +94,5 @@ async def _(event):
     else:
         result = event.date
     await edit_or_reply(
-        event, f"**This message is posted on :** `{yaml_format(result)}`"
+        event, f"**This message was posted on :** `{yaml_format(result)}`"
     )
