@@ -553,7 +553,7 @@ async def pack_kang(event):  # sourcery no-metrics
         await asyncio.sleep(2)
     result = "`This sticker pack is kanged into the following your sticker pack(s):`\n"
     for i in enumerate(blablapacks):
-        result += f"  •  [pack {blablapacknames[i]}](t.me/addstickers/{blablapacks[i]})"
+        result += f"  •  [pack {blablapacknames[i[0]]}](t.me/addstickers/{blablapacks[i[0]]})"
     await catevent.edit(result)
 
 
