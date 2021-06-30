@@ -1,0 +1,15 @@
+---
+application:
+  name: "oceancatbot"
+  project: "ocean"
+  organization: "QoveryCommunity"
+databases:
+- type: "POSTGRESQL"
+  name: "oceancatbot"
+  version: "12"
+routers:
+- name: "main-oceancatbot"
+  routes:
+  - application_name: "oceancatbot"
+    paths:
+    - "/*"
