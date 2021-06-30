@@ -172,7 +172,7 @@ async def set_no_log_p_m(event):
 )
 async def set_no_log_p_m(event):
     "To turn off logging of messages from that chat."
-    if Config.PM_LOGGER_GROUP_ID !=-100:
+    if Config.PM_LOGGER_GROUP_ID != -100:
         chat = await event.get_chat()
         if not no_log_pms_sql.is_approved(chat.id):
             no_log_pms_sql.approve(chat.id)
