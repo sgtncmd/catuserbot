@@ -46,7 +46,7 @@ async def catbot(event):
         response = upload_file(download_location)
     except exceptions.TelegraphException as exc:
         os.remove(download_location)
-        return await output[0].edit(f"**Error: **\n`{str(exc)}`")
+        return await output[0].edit(f"**Error: **\n`{exc}`")
     cat = f"https://telegra.ph{response[0]}"
     cat = await trash(cat)
     os.remove(download_location)
@@ -85,7 +85,7 @@ async def catbot(event):
         response = upload_file(download_location)
     except exceptions.TelegraphException as exc:
         os.remove(download_location)
-        return await output[0].edit(f"**Error: **\n`{str(exc)}`")
+        return await output[0].edit(f"**Error: **\n`{exc}`")
     cat = f"https://telegra.ph{response[0]}"
     cat = await threats(cat)
     await output[0].delete()
@@ -94,7 +94,7 @@ async def catbot(event):
 
 
 @catub.cat_cmd(
-    pattern="trap(?: |$)(.*)",
+    pattern="trap(?:\s|$)([\s\S]*)",
     command=("trap", plugin_category),
     info={
         "header": "Reply to image/sticker to get meme on that image.",
@@ -134,7 +134,7 @@ async def catbot(event):
         response = upload_file(download_location)
     except exceptions.TelegraphException as exc:
         os.remove(download_location)
-        return await output[0].edit(f"**Error: **\n`{str(exc)}`")
+        return await output[0].edit(f"**Error: **\n`{exc}`")
     cat = f"https://telegra.ph{response[0]}"
     cat = await trap(text1, text2, cat)
     await output[0].delete()
@@ -143,7 +143,7 @@ async def catbot(event):
 
 
 @catub.cat_cmd(
-    pattern="phub(?: |$)(.*)",
+    pattern="phub(?:\s|$)([\s\S]*)",
     command=("phub", plugin_category),
     info={
         "header": "Reply to image/sticker to get meme on that image.",
@@ -184,7 +184,7 @@ async def catbot(event):
         response = upload_file(download_location)
     except exceptions.TelegraphException as exc:
         os.remove(download_location)
-        return await output[0].edit(f"**Error: **\n`{str(exc)}`")
+        return await output[0].edit(f"**Error: **\n`{exc}`")
     cat = f"https://telegra.ph{response[0]}"
     cat = await phcomment(cat, text, username)
     await output[0].delete()

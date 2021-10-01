@@ -1,4 +1,4 @@
-import sys
+import os
 from asyncio.exceptions import CancelledError
 from time import sleep
 
@@ -72,7 +72,7 @@ async def _(event):
     if HEROKU_APP is not None:
         HEROKU_APP.process_formation()["worker"].scale(0)
     else:
-        sys.exit(0)
+        os._exit(143)
 
 
 @catub.cat_cmd(
@@ -117,8 +117,8 @@ async def set_pmlog(event):
         if gvarstatus("restartupdate") is None:
             return await edit_delete(event, "__Notify was already disabled__")
         delgvar("restartupdate")
-        return await edit_or_reply(event, "__Notify was disabled succesfully.__")
+        return await edit_or_reply(event, "__Notify was disabled successfully.__")
     if gvarstatus("restartupdate") is None:
         addgvar("restartupdate", "turn-oned")
-        return await edit_or_reply(event, "__Notify was enabled succesfully.__")
+        return await edit_or_reply(event, "__Notify was enabled successfully.__")
     await edit_delete(event, "__Notify was already enabled.__")

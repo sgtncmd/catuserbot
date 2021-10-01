@@ -45,6 +45,7 @@ EMOJI_SEN = [
     "Du kannst auch mehrere Emoji eingeben, ich empfehle dir aber nicht mehr als zwei pro Sticker zu benutzen.",
     "Você pode listar vários emojis em uma mensagem, mas recomendo não usar mais do que dois por cada sticker.",
     "Puoi elencare diverse emoji in un singolo messaggio, ma ti consiglio di non usarne più di due per sticker.",
+    "emoji",
 ]
 
 KANGING_STR = [
@@ -77,15 +78,16 @@ def char_is_emoji(character):
 
 def pack_nick(username, pack, is_anim):
     if gvarstatus("CUSTOM_STICKER_PACKNAME"):
-        if is_anim:
-            packnick = f"{gvarstatus('CUSTOM_STICKER_PACKNAME')} Vol.{pack} (Animated)"
-        else:
-            packnick = f"{gvarstatus('CUSTOM_STICKER_PACKNAME')} Vol.{pack}"
+        return (
+            f"{gvarstatus('CUSTOM_STICKER_PACKNAME')} Vol.{pack} (Animated)"
+            if is_anim
+            else f"{gvarstatus('CUSTOM_STICKER_PACKNAME')} Vol.{pack}"
+        )
+
     elif is_anim:
-        packnick = f"@{username} Vol.{pack} (Animated)"
+        return f"@{username} Vol.{pack} (Animated)"
     else:
-        packnick = f"@{username} Vol.{pack}"
-    return packnick
+        return f"@{username} Vol.{pack}"
 
 
 async def resize_photo(photo):
@@ -126,7 +128,13 @@ async def newpacksticker(
     otherpack=False,
     pkang=False,
 ):
-    await conv.send_message(cmd)
+    try:
+        await conv.send_message(cmd)
+    except YouBlockedUserError:
+        await catevent.edit("You have blocked the @stickers bot. unblock it and try.")
+        if not pkang:
+            return None, None, None
+        return None, None
     await conv.get_response()
     await args.client.send_read_acknowledge(conv.chat_id)
     await conv.send_message(packnick)
@@ -143,7 +151,9 @@ async def newpacksticker(
         await catevent.edit(
             f"Failed to add sticker, use @Stickers bot to add the sticker manually.\n**error :**{rsp}"
         )
-        return
+        if not pkang:
+            return None, None, None
+        return None, None
     await conv.send_message(emoji)
     await args.client.send_read_acknowledge(conv.chat_id)
     await conv.get_response()
@@ -179,7 +189,13 @@ async def add_to_pack(
     cmd,
     pkang=False,
 ):
-    await conv.send_message("/addsticker")
+    try:
+        await conv.send_message("/addsticker")
+    except YouBlockedUserError:
+        await catevent.edit("You have blocked the @stickers bot. unblock it and try.")
+        if not pkang:
+            return None, None
+        return None, None
     await conv.get_response()
     await args.client.send_read_acknowledge(conv.chat_id)
     await conv.send_message(packname)
@@ -192,9 +208,7 @@ async def add_to_pack(
             pack = 1
         packname = pack_name(userid, pack, is_anim)
         packnick = pack_nick(username, pack, is_anim)
-        await catevent.edit(
-            f"`Switching to Pack {str(pack)} due to insufficient space`"
-        )
+        await catevent.edit(f"`Switching to Pack {pack} due to insufficient space`")
         await conv.send_message(packname)
         x = await conv.get_response()
         if x.text == "Invalid pack selected.":
@@ -223,7 +237,9 @@ async def add_to_pack(
         await catevent.edit(
             f"Failed to add sticker, use @Stickers bot to add the sticker manually.\n**error :**{rsp}"
         )
-        return
+        if not pkang:
+            return None, None
+        return None, None
     await conv.send_message(emoji)
     await args.client.send_read_acknowledge(conv.chat_id)
     await conv.get_response()
@@ -236,7 +252,7 @@ async def add_to_pack(
 
 
 @catub.cat_cmd(
-    pattern="kang(?: |$)(.*)",
+    pattern="kang(?:\s|$)([\s\S]*)",
     command=("kang", plugin_category),
     info={
         "header": "To kang a sticker.",
@@ -333,7 +349,7 @@ async def kang(args):  # sourcery no-metrics
             "  A <strong>Telegram</strong> user has created the <strong>Sticker&nbsp;Set</strong>."
             not in htmlstr
         ):
-            async with args.client.conversation("Stickers") as conv:
+            async with args.client.conversation("@Stickers") as conv:
                 packname, emoji = await add_to_pack(
                     catevent,
                     conv,
@@ -347,6 +363,8 @@ async def kang(args):  # sourcery no-metrics
                     emoji,
                     cmd,
                 )
+            if packname is None:
+                return
             await edit_delete(
                 catevent,
                 f"`Sticker kanged successfully!\
@@ -356,7 +374,7 @@ async def kang(args):  # sourcery no-metrics
             )
         else:
             await catevent.edit("`Brewing a new Pack...`")
-            async with args.client.conversation("Stickers") as conv:
+            async with args.client.conversation("@Stickers") as conv:
                 otherpack, packname, emoji = await newpacksticker(
                     catevent,
                     conv,
@@ -369,6 +387,8 @@ async def kang(args):  # sourcery no-metrics
                     packname,
                     is_anim,
                 )
+            if otherpack is None:
+                return
             if otherpack:
                 await edit_delete(
                     catevent,
@@ -388,7 +408,7 @@ async def kang(args):  # sourcery no-metrics
 
 
 @catub.cat_cmd(
-    pattern="pkang(?: |$)(.*)",
+    pattern="pkang(?:\s|$)([\s\S]*)",
     command=("pkang", plugin_category),
     info={
         "header": "To kang entire sticker sticker.",
@@ -515,7 +535,7 @@ async def pack_kang(event):  # sourcery no-metrics
                 "  A <strong>Telegram</strong> user has created the <strong>Sticker&nbsp;Set</strong>."
                 in htmlstr
             ):
-                async with event.client.conversation("Stickers") as conv:
+                async with event.client.conversation("@Stickers") as conv:
                     pack, catpackname = await newpacksticker(
                         catevent,
                         conv,
@@ -530,7 +550,7 @@ async def pack_kang(event):  # sourcery no-metrics
                         pkang=True,
                     )
             else:
-                async with event.client.conversation("Stickers") as conv:
+                async with event.client.conversation("@Stickers") as conv:
                     pack, catpackname = await add_to_pack(
                         catevent,
                         conv,
@@ -545,6 +565,8 @@ async def pack_kang(event):  # sourcery no-metrics
                         cmd,
                         pkang=True,
                     )
+            if catpackname is None:
+                return
             if catpackname not in blablapacks:
                 blablapacks.append(catpackname)
                 blablapacknames.append(pack)
@@ -552,12 +574,14 @@ async def pack_kang(event):  # sourcery no-metrics
         await asyncio.sleep(2)
     result = "`This sticker pack is kanged into the following your sticker pack(s):`\n"
     for i in enumerate(blablapacks):
-        result += f"  •  [pack {blablapacknames[i]}](t.me/addstickers/{blablapacks[i]})"
+        result += (
+            f"  •  [pack {blablapacknames[i[0]]}](t.me/addstickers/{blablapacks[i[0]]})"
+        )
     await catevent.edit(result)
 
 
 @catub.cat_cmd(
-    pattern="gridpack(?: |$)(.*)",
+    pattern="gridpack(?:\s|$)([\s\S]*)",
     command=("gridpack", plugin_category),
     info={
         "header": "To split the replied image and make sticker pack.",
@@ -651,10 +675,11 @@ async def pic2packcmd(event):
             )
             await event.client.send_read_acknowledge(conv.chat_id)
             for packname in ending.raw_text.split():
-                if packname.startswith("https://t.me/"):
+                stick_pack_name = packname
+                if stick_pack_name.startswith("https://t.me/"):
                     break
             await catevent.edit(
-                f"__Succesfully created the pack for the replied media : __[{args}]({packname})"
+                f"__successfully created the pack for the replied media : __[{args}]({stick_pack_name})"
             )
 
         except YouBlockedUserError:
@@ -718,7 +743,7 @@ async def get_pack_info(event):
 
 
 @catub.cat_cmd(
-    pattern="stickers ?(.*)",
+    pattern="stickers ?([\s\S]*)",
     command=("stickers", plugin_category),
     info={
         "header": "To get list of sticker packs with given name.",

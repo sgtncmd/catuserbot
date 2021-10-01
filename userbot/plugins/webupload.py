@@ -25,7 +25,7 @@ link_regex = re.compile(
 
 
 @catub.cat_cmd(
-    pattern="labstack(?: |$)(.*)",
+    pattern="labstack(?:\s|$)([\s\S]*)",
     command=("labstack", plugin_category),
     info={
         "header": "To upload media to labstack.",
@@ -159,7 +159,7 @@ async def _(event):
         result = ""
         for i in urls:
             if not result:
-                result = f"**Uploaded File link/links :**"
+                result = "**Uploaded File link/links :**"
             result += f"\n{i[0]}"
         await editor.edit(result)
     else:

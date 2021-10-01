@@ -63,7 +63,7 @@ async def subprocess_run(megadl, cmd):
 
 
 @catub.cat_cmd(
-    pattern="mega(?: |$)(.*)",
+    pattern="mega(?:\s|$)([\s\S]*)",
     command=("mega", plugin_category),
     info={
         "header": "Downloads mega files from it links.",
@@ -147,8 +147,8 @@ async def mega_downloader(megadl):  # sourcery no-metrics
                 f"{progress_str}\n"
                 f"`{humanbytes(downloaded)}` of `{humanbytes(total_length)}`"
                 f" @ `{speed}`\n"
-                f"**➥ETA -> **`{time_formatter(estimated_total_time)}`\n"
                 f"**➥ Duration -> **`{time_formatter(round(diff))}`"
+                f"**➥ETA -> **`{time_formatter(estimated_total_time)}`\n"
             )
             if round(diff % 15.00) == 0 and (
                 display_message != current_message or total_length == downloaded

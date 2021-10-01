@@ -2,6 +2,7 @@ import base64
 from asyncio import sleep
 
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
+from telethon.utils import get_display_name
 
 from .. import catub
 from ..core.logger import logging
@@ -16,7 +17,7 @@ LOGS = logging.getLogger(__name__)
 
 
 @catub.cat_cmd(
-    pattern="msgto(?: |$)(.*)",
+    pattern="msgto(?:\s|$)([\s\S]*)",
     command=("msgto", plugin_category),
     info={
         "header": "To message to person or to a chat.",
@@ -40,29 +41,26 @@ async def catbroadcast_add(event):
         )
     if reply and reason and user.id != reply.sender_id:
         if BOTLOG:
-            if reason:
-                msg = await event.client.send_message(BOTLOG_CHATID, reason)
-            elif reply:
-                msg = await event.client.send_message(BOTLOG_CHATID, reply)
+            msg = await event.client.send_message(BOTLOG_CHATID, reason)
             await event.client.send_message(
                 BOTLOG_CHATID,
                 "The replied message was failed to send to the user. Confusion between to whom it should send.",
                 reply_to=msg.id,
             )
+        msglink = await event.clienr.get_msg_link(msg)
         return await edit_or_reply(
             event,
-            f"__Sorry! Confusion between users to whom should i send the person mentioned in message or to the person replied.text message ws logged in log group. you can resend message from there__",
+            f"__Sorry! Confusion between users to whom should i send the person mentioned in message or to the person replied. text message was logged in [log group]({msglink}). you can resend message from there__",
         )
     if reason:
         msg = await event.client.send_message(user.id, reason)
-        await edit_delete(event, "__Successfully sent the message.__")
-    elif reply:
+    else:
         msg = await event.client.send_message(user.id, reply)
-        await edit_delete(event, "__Successfully sent the message.__")
+    await edit_delete(event, "__Successfully sent the message.__")
 
 
 @catub.cat_cmd(
-    pattern="addto(?: |$)(.*)",
+    pattern="addto(?:\s|$)([\s\S]*)",
     command=("addto", plugin_category),
     info={
         "header": "Will add the specific chat to the mentioned category",
@@ -98,7 +96,7 @@ async def catbroadcast_add(event):
         try:
             await event.client.send_message(
                 BOTLOG_CHATID,
-                f"The Chat {chat.title} is added to category {keyword}",
+                f"The Chat {get_display_name(await event.get_chat())} is added to category {keyword}",
                 parse_mode=_format.parse_pre,
             )
         except Exception:
@@ -110,7 +108,7 @@ async def catbroadcast_add(event):
 
 
 @catub.cat_cmd(
-    pattern="list(?: |$)(.*)",
+    pattern="list(?:\s|$)([\s\S]*)",
     command=("list", plugin_category),
     info={
         "header": "will show the list of all chats in the given category",
@@ -182,7 +180,7 @@ async def catbroadcast_list(event):
 
 
 @catub.cat_cmd(
-    pattern="sendto(?: |$)(.*)",
+    pattern="sendto(?:\s|$)([\s\S]*)",
     command=("sendto", plugin_category),
     info={
         "header": "will send the replied message to all chats in the given category",
@@ -237,7 +235,7 @@ async def catbroadcast_send(event):
             LOGS.info(str(e))
         await sleep(0.5)
     resultext = f"`The message was sent to {i} chats out of {no_of_chats} chats in category {keyword}.`"
-    await catevent.edit(resultext)
+    await edit_delete(catevent, resultext)
     if BOTLOG:
         await event.client.send_message(
             BOTLOG_CHATID,
@@ -247,7 +245,7 @@ async def catbroadcast_send(event):
 
 
 @catub.cat_cmd(
-    pattern="fwdto(?: |$)(.*)",
+    pattern="fwdto(?:\s|$)([\s\S]*)",
     command=("fwdto", plugin_category),
     info={
         "header": "Will forward the replied message to all chats in the given category",
@@ -302,7 +300,7 @@ async def catbroadcast_send(event):
             LOGS.info(str(e))
         await sleep(0.5)
     resultext = f"`The message was sent to {i} chats out of {no_of_chats} chats in category {keyword}.`"
-    await catevent.edit(resultext)
+    await edit_delete(catevent, resultext)
     if BOTLOG:
         await event.client.send_message(
             BOTLOG_CHATID,
@@ -312,7 +310,7 @@ async def catbroadcast_send(event):
 
 
 @catub.cat_cmd(
-    pattern="rmfrom(?: |$)(.*)",
+    pattern="rmfrom(?:\s|$)([\s\S]*)",
     command=("rmfrom", plugin_category),
     info={
         "header": "Will remove the specific chat to the mentioned category",
@@ -348,7 +346,7 @@ async def catbroadcast_remove(event):
         try:
             await event.client.send_message(
                 BOTLOG_CHATID,
-                f"The Chat {chat.title} is removed from category {keyword}",
+                f"The Chat {get_display_name(await event.get_chat())} is removed from category {keyword}",
                 parse_mode=_format.parse_pre,
             )
         except Exception:
@@ -360,7 +358,7 @@ async def catbroadcast_remove(event):
 
 
 @catub.cat_cmd(
-    pattern="frmfrom(?: |$)(.*)",
+    pattern="frmfrom(?:\s|$)([\s\S]*)",
     command=("frmfrom", plugin_category),
     info={
         "header": " To force remove the given chat from a category.",
@@ -417,7 +415,7 @@ async def catbroadcast_remove(event):
         try:
             await event.client.send_message(
                 BOTLOG_CHATID,
-                f"The Chat {chat.title} is removed from category {keyword}",
+                f"The Chat {get_display_name(await event.get_chat())} is removed from category {keyword}",
                 parse_mode=_format.parse_pre,
             )
         except Exception:
@@ -429,7 +427,7 @@ async def catbroadcast_remove(event):
 
 
 @catub.cat_cmd(
-    pattern="delc(?: |$)(.*)",
+    pattern="delc(?:\s|$)([\s\S]*)",
     command=("delc", plugin_category),
     info={
         "header": "To Deletes the category completely from database",

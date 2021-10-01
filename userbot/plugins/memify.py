@@ -84,9 +84,7 @@ async def maccmd(event):  # sourcery no-metrics
             )
         image = Image.open(imag[1])
     except Exception as e:
-        return await edit_delete(
-            catevent, f"**Error in identifying image:**\n__{str(e)}__"
-        )
+        return await edit_delete(catevent, f"**Error in identifying image:**\n__{e}__")
     wid, hgt = image.size
     img = Image.new("RGBA", (wid, hgt))
     scale = min(wid // 100, hgt // 100)
@@ -130,7 +128,7 @@ async def maccmd(event):  # sourcery no-metrics
 
 
 @catub.cat_cmd(
-    pattern="(mmf|mms)(?: |$)(.*)",
+    pattern="(mmf|mms)(?:\s|$)([\s\S]*)",
     command=("mmf", plugin_category),
     info={
         "header": "To write text on stickers or images.",
@@ -202,7 +200,7 @@ async def memes(event):
 
 
 @catub.cat_cmd(
-    pattern="cfont(?: |$)(.*)",
+    pattern="cfont(?:\s|$)([\s\S]*)",
     command=("cfont", plugin_category),
     info={
         "header": "Change the font style use for memify.To get font list use cfont command as it is without input.",
@@ -227,7 +225,7 @@ async def lang(event):
 
 
 @catub.cat_cmd(
-    pattern="ascii(?: |$)(.*)",
+    pattern="ascii(?:\s|$)([\s\S]*)",
     command=("ascii", plugin_category),
     info={
         "header": "To get ascii image of replied image.",
@@ -512,7 +510,7 @@ async def memes(event):
 
 
 @catub.cat_cmd(
-    pattern="zoom ?(.*)",
+    pattern="zoom ?([\s\S]*)",
     command=("zoom", plugin_category),
     info={
         "header": "zooms your media file,",
@@ -566,7 +564,7 @@ async def memes(event):
 
 
 @catub.cat_cmd(
-    pattern="frame ?(.*)",
+    pattern="frame ?([\s\S]*)",
     command=("frame", plugin_category),
     info={
         "header": "make a frame for your media file.",

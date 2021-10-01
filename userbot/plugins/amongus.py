@@ -77,7 +77,7 @@ async def get_imposter_img(text: str) -> str:
 
 
 @catub.cat_cmd(
-    pattern="amongus(?: |$)(.*)",
+    pattern="amongus(?:\s|$)([\s\S]*)",
     command=("amongus", plugin_category),
     info={
         "header": "Create a Sticker based on the popular game Among Us",
@@ -135,7 +135,7 @@ async def sayliecmd(event):
 
 
 @catub.cat_cmd(
-    pattern="imposter(?: |$)(.*)",
+    pattern="imposter(?:\s|$)([\s\S]*)",
     command=("imposter", plugin_category),
     info={
         "header": "Fun images for imposter ",
@@ -153,13 +153,13 @@ async def procces_img(event):
     args = event.pattern_match.group(1)
     if not user:
         try:
-            if not args and not reply:
-                user = await event.client.get_me()
-            else:
+            if args or reply:
                 user = await event.client.get_entity(args or reply.sender_id)
+            else:
+                user = await event.client.get_me()
             text = f"{get_display_name(user)} {choice(imps)}."
             text += text2
-        except:
+        except Exception:
             text = args
     else:
         text = f"{get_display_name(user)} {choice(imps)}."
@@ -170,7 +170,7 @@ async def procces_img(event):
 
 
 @catub.cat_cmd(
-    pattern="imp(|n) (.*)",
+    pattern="imp(|n) ([\s\S]*)",
     command=("imp", plugin_category),
     info={
         "header": "Find imposter with stickers animation.",
@@ -208,9 +208,9 @@ async def _(event):
     stcr3 = await event.client.send_file(
         event.chat_id, "CAADAQADOwADnjOcH77v3Ap51R7gAg"
     )
-    text4 = await event.reply(f"**Others :** Where??? ")
+    text4 = await event.reply("**Others :** Where??? ")
     await asyncio.sleep(2)
-    await text4.edit(f"**Others :** Who?? ")
+    await text4.edit("**Others :** Who?? ")
     await asyncio.sleep(2)
     await text4.edit(
         f"**[{ALIVE_NAME}]({USERNAME}) :** Its {name} , I saw {name}  using vent,"
@@ -263,7 +263,7 @@ async def _(event):
 
 
 @catub.cat_cmd(
-    pattern="timp(|n) (.*)",
+    pattern="timp(|n) ([\s\S]*)",
     command=("timp", plugin_category),
     info={
         "header": "Find imposter with text animation.",

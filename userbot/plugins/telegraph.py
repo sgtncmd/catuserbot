@@ -30,7 +30,7 @@ def resize_image(image):
 
 
 @catub.cat_cmd(
-    pattern="(t(ele)?g(raph)?) ?(m|t|media|text)(?: |$)(.*)",
+    pattern="(t(ele)?g(raph)?) ?(m|t|media|text)(?:\s|$)([\s\S]*)",
     command=("telegraph", plugin_category),
     info={
         "header": "To get telegraph link.",
@@ -75,7 +75,7 @@ async def _(event):
         try:
             media_urls = upload_file(downloaded_file_name)
         except exceptions.TelegraphException as exc:
-            await catevent.edit(f"**Error : **\n`{str(exc)}`")
+            await catevent.edit(f"**Error : **\n`{exc}`")
             os.remove(downloaded_file_name)
         else:
             end = datetime.now()

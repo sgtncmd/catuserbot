@@ -12,7 +12,7 @@ plugin_category = "extra"
 
 
 @catub.cat_cmd(
-    pattern="firmware (.*)",
+    pattern="firmware ([\s\S]*)",
     command=("firmware", plugin_category),
     info={
         "header": "To get lastest Firmware.",
@@ -24,7 +24,7 @@ plugin_category = "extra"
 async def _(event):
     "To get lastest Firmware."
     link = event.pattern_match.group(1)
-    firmware = f"firmware"
+    firmware = "firmware"
     catevent = await edit_or_reply(event, "```Processing```")
     async with event.client.conversation("@XiaomiGeeksBot") as conv:
         try:
@@ -42,7 +42,7 @@ async def _(event):
 
 
 @catub.cat_cmd(
-    pattern="vendor (.*)",
+    pattern="vendor ([\s\S]*)",
     command=("vendor", plugin_category),
     info={
         "header": "To get lastest Vendor.",
@@ -54,7 +54,7 @@ async def _(event):
 async def _(event):
     "To get lastest Vendor."
     link = event.pattern_match.group(1)
-    vendor = f"vendor"
+    vendor = "vendor"
     catevent = await edit_or_reply(event, "```Processing```")
     async with event.client.conversation("@XiaomiGeeksBot") as conv:
         try:
@@ -72,7 +72,7 @@ async def _(event):
 
 
 @catub.cat_cmd(
-    pattern="xspecs (.*)",
+    pattern="xspecs ([\s\S]*)",
     command=("xspecs", plugin_category),
     info={
         "header": "To get quick spec information about device",
@@ -84,7 +84,7 @@ async def _(event):
 async def _(event):
     "To get quick spec information about device"
     link = event.pattern_match.group(1)
-    specs = f"specs"
+    specs = "specs"
     catevent = await edit_or_reply(event, "```Processing```")
     async with event.client.conversation("@XiaomiGeeksBot") as conv:
         try:
@@ -102,7 +102,7 @@ async def _(event):
 
 
 @catub.cat_cmd(
-    pattern="fastboot (.*)",
+    pattern="fastboot ([\s\S]*)",
     command=("fastboot", plugin_category),
     info={
         "header": "To get latest fastboot MIUI.",
@@ -114,7 +114,7 @@ async def _(event):
 async def _(event):
     "To get latest fastboot MIUI."
     link = event.pattern_match.group(1)
-    fboot = f"fastboot"
+    fboot = "fastboot"
     catevent = await edit_or_reply(event, "```Processing```")
     async with event.client.conversation("@XiaomiGeeksBot") as conv:
         try:
@@ -132,7 +132,7 @@ async def _(event):
 
 
 @catub.cat_cmd(
-    pattern="recovery (.*)",
+    pattern="recovery ([\s\S]*)",
     command=("recovery", plugin_category),
     info={
         "header": "To get latest recovery MIUI.",
@@ -144,7 +144,7 @@ async def _(event):
 async def _(event):
     "To get latest recovery MIUI."
     link = event.pattern_match.group(1)
-    recovery = f"recovery"
+    recovery = "recovery"
     catevent = await edit_or_reply(event, "```Processing```")
     async with event.client.conversation("@XiaomiGeeksBot") as conv:
         try:
@@ -162,7 +162,7 @@ async def _(event):
 
 
 @catub.cat_cmd(
-    pattern="pb (.*)",
+    pattern="pb ([\s\S]*)",
     command=("pb", plugin_category),
     info={
         "header": "To get latest PBRP.",
@@ -174,7 +174,7 @@ async def _(event):
 async def _(event):
     "To get latest PBRP."
     link = event.pattern_match.group(1)
-    pitch = f"pb"
+    pitch = "pb"
     catevent = await edit_or_reply(event, "```Processing```")
     async with event.client.conversation("@XiaomiGeeksBot") as conv:
         try:
@@ -192,7 +192,7 @@ async def _(event):
 
 
 @catub.cat_cmd(
-    pattern="of (.*)",
+    pattern="of ([\s\S]*)",
     command=("of", plugin_category),
     info={
         "header": "To get latest ORangeFox Recover.",
@@ -204,7 +204,7 @@ async def _(event):
 async def _(event):
     "To get latest ORangeFox Recover."
     link = event.pattern_match.group(1)
-    ofox = f"of"
+    ofox = "of"
     catevent = await edit_or_reply(event, "```Processing```")
     async with event.client.conversation("@XiaomiGeeksBot") as conv:
         try:

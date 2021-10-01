@@ -61,12 +61,11 @@ async def chat_blacklist(event):
                 text,
             )
             return await event.client.reload(msg)
-        else:
-            text += "**You haven't added anyone to your sudo yet.**"
-            return await edit_or_reply(
-                event,
-                text,
-            )
+        text += "**You haven't added anyone to your sudo yet.**"
+        return await edit_or_reply(
+            event,
+            text,
+        )
     if gvarstatus("sudoenable") is not None:
         delgvar("sudoenable")
         text = "__Disabled sudo successfully.__"
@@ -79,17 +78,16 @@ async def chat_blacklist(event):
                 text,
             )
             return await event.client.reload(msg)
-        else:
-            text += "**You haven't added any chat to blacklist yet.**"
-            return await edit_or_reply(
-                event,
-                text,
-            )
+        text += "**You haven't added any chat to blacklist yet.**"
+        return await edit_or_reply(
+            event,
+            text,
+        )
     await edit_delete(event, "It was turned off already")
 
 
 @catub.cat_cmd(
-    pattern="addsudo(?: |$)(.*)",
+    pattern="addsudo(?:\s|$)([\s\S]*)",
     command=("addsudo", plugin_category),
     info={
         "header": "To add user as your sudo.",
@@ -129,7 +127,7 @@ async def add_sudo_user(event):
 
 
 @catub.cat_cmd(
-    pattern="delsudo(?: |$)(.*)",
+    pattern="delsudo(?:\s|$)([\s\S]*)",
     command=("delsudo", plugin_category),
     info={
         "header": "To remove user from your sudo.",
@@ -189,7 +187,7 @@ async def _(event):
 
 
 @catub.cat_cmd(
-    pattern="addscmd(s)? ((.|\n)*)",
+    pattern="addscmd(s)?(?:\s|$)([\s\S]*)",
     command=("addscmd", plugin_category),
     info={
         "header": "To enable cmds for sudo users.",
@@ -256,7 +254,9 @@ async def _(event):  # sourcery no-metrics
         loadcmds = []
         for plugin in input_str:
             if plugin not in PLG_INFO:
-                errors += f"`{cmd}` __There is no such plugin in your CatUserbot__.\n"
+                errors += (
+                    f"`{plugin}` __There is no such plugin in your CatUserbot__.\n"
+                )
             else:
                 loadcmds += PLG_INFO[plugin]
     else:
@@ -282,7 +282,7 @@ async def _(event):  # sourcery no-metrics
 
 
 @catub.cat_cmd(
-    pattern="rmscmd(s)? ((.|\n)*)?",
+    pattern="rmscmd(s)?(?:\s|$)([\s\S]*)?",
     command=("rmscmd", plugin_category),
     info={
         "header": "To disable given cmds for sudo.",
@@ -345,7 +345,9 @@ async def _(event):  # sourcery no-metrics
         flagcmds = []
         for plugin in input_str:
             if plugin not in PLG_INFO:
-                errors += f"`{cmd}` __There is no such plugin in your CatUserbot__.\n"
+                errors += (
+                    f"`{plugin}` __There is no such plugin in your CatUserbot__.\n"
+                )
             else:
                 flagcmds += PLG_INFO[plugin]
     else:

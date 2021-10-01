@@ -78,11 +78,11 @@ async def restart_script(client: TelegramClient, sandy):
     executable = sys.executable.replace(" ", "\\ ")
     args = [executable, "-m", "userbot"]
     os.execle(executable, *args, os.environ)
-    sys.exit(0)
+    os._exit(143)
 
 
 async def get_message_link(client, event):
     chat = await event.get_chat()
     if event.is_private:
-        return f"tg://openmessage?user_id={chat.id}&message_id={event.message.id}"
-    return f"https://t.me/c/{chat.id}/{event.message.id}"
+        return f"tg://openmessage?user_id={chat.id}&message_id={event.id}"
+    return f"https://t.me/c/{chat.id}/{event.id}"

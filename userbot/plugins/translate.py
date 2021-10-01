@@ -24,11 +24,11 @@ async def getTranslate(text, **kwargs):
 
 
 @catub.cat_cmd(
-    pattern="tl (.*)",
+    pattern="tl ([\s\S]*)",
     command=("tl", plugin_category),
     info={
         "header": "To translate the text to required language.",
-        "note": "For langugage codes check [this link](https://telegra.ph/Language-codes-11-01)",
+        "note": "For langugage codes check [this link](https://bit.ly/2SRQ6WU)",
         "usage": [
             "{tr}tl <language code> ; <text>",
             "{tr}tl <language codes>",
@@ -59,7 +59,7 @@ async def _(event):
                 \n`{after_tr_text}`"
         await edit_or_reply(event, output_str)
     except Exception as exc:
-        await edit_delete(event, f"**Error:**\n`{str(exc)}`", time=5)
+        await edit_delete(event, f"**Error:**\n`{exc}`", time=5)
 
 
 @catub.cat_cmd(
@@ -104,11 +104,11 @@ async def translateme(trans):
 
 
 @catub.cat_cmd(
-    pattern="lang (ai|trt) (.*)",
+    pattern="lang (ai|trt) ([\s\S]*)",
     command=("lang", plugin_category),
     info={
         "header": "To set language for trt/ai command.",
-        "description": "Check here [Language codes](https://telegra.ph/Language-Codes-05-24-2)",
+        "description": "Check here [Language codes](https://bit.ly/2SRQ6WU)",
         "options": {
             "trt": "default language for trt command",
             "ai": "default language for chatbot(ai)",

@@ -9,10 +9,12 @@ from pySmartDL import SmartDL
 from userbot import catub
 
 from ..Config import Config
+from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.utils import reply_id
 from . import reply_id
 
+LOGS = logging.getLogger(os.path.basename(__name__))
 ppath = os.path.join(os.getcwd(), "temp", "githubuser.jpg")
 plugin_category = "misc"
 
@@ -34,12 +36,12 @@ async def source(e):
     await edit_or_reply(
         e,
         "Click [here](https://github.com/sandy1709/catuserbot) to open this bot source code\
-        \nClick [here](https://github.com/Mr-confused/catpack) to open supported link for heroku",
+        \nClick [here](https://github.com/Mr-confused/nekopack) to open supported link for heroku",
     )
 
 
 @catub.cat_cmd(
-    pattern="github( -l(\d+))? (.*)",
+    pattern="github( -l(\d+))? ([\s\S]*)",
     command=("github", plugin_category),
     info={
         "header": "Shows the information about an user on GitHub of given username",
@@ -130,6 +132,10 @@ async def download(event):
         os.makedirs(GIT_TEMP_DIR)
     start = datetime.now()
     reply_message = await event.get_reply_message()
+    if not reply_message or not reply_message.media:
+        return await edit_delete(
+            event, "__Reply to a file which you want to commit in your github.__"
+        )
     try:
         downloaded_file_name = await event.client.download_media(reply_message.media)
     except Exception as e:
@@ -151,31 +157,31 @@ async def git_commit(file_name, mone):
     file = open(file_name, "r", encoding="utf-8")
     commit_data = file.read()
     repo = g.get_repo(Config.GIT_REPO_NAME)
-    print(repo.name)
+    LOGS.info(repo.name)
     create_file = True
     contents = repo.get_contents("")
     for content_file in contents:
         content_list.append(str(content_file))
-        print(content_file)
+        LOGS.info(content_file)
     for i in content_list:
         create_file = True
         if i == 'ContentFile(path="' + file_name + '")':
             return await mone.edit("`File Already Exists`")
     if create_file:
         file_name = "userbot/plugins/" + file_name
-        print(file_name)
+        LOGS.info(file_name)
         try:
             repo.create_file(
                 file_name, "Uploaded New Plugin", commit_data, branch="master"
             )
-            print("Committed File")
+            LOGS.info("Committed File")
             ccess = Config.GIT_REPO_NAME
             ccess = ccess.strip()
             await mone.edit(
                 f"`Commited On Your Github Repo`\n\n[Your PLUGINS](https://github.com/{ccess}/tree/master/userbot/plugins/)"
             )
         except BaseException:
-            print("Cannot Create Plugin")
+            LOGS.info("Cannot Create Plugin")
             await mone.edit("Cannot Upload Plugin")
     else:
         return await mone.edit("`Committed Suicide`")

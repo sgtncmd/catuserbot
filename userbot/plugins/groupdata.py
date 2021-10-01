@@ -30,7 +30,7 @@ plugin_category = "utils"
 
 
 @catub.cat_cmd(
-    pattern="admins(?: |$)(.*)",
+    pattern="admins(?:\s|$)([\s\S]*)",
     command=("admins", plugin_category),
     info={
         "header": "To get list of admins.",
@@ -73,11 +73,10 @@ async def _(event):
         ):
             if x.deleted:
                 mentions += "\n `{}`".format(x.id)
-            else:
-                if isinstance(x.participant, ChannelParticipantAdmin):
-                    mentions += "\n ⚜️ [{}](tg://user?id={}) `{}`".format(
-                        x.first_name, x.id, x.id
-                    )
+            elif isinstance(x.participant, ChannelParticipantAdmin):
+                mentions += "\n ⚜️ [{}](tg://user?id={}) `{}`".format(
+                    x.first_name, x.id, x.id
+                )
     except Exception as e:
         mentions += " " + str(e) + "\n"
     await event.client.send_message(event.chat_id, mentions, reply_to=reply_message)
@@ -85,7 +84,7 @@ async def _(event):
 
 
 @catub.cat_cmd(
-    pattern="bots(?: |$)(.*)",
+    pattern="bots(?:\s|$)([\s\S]*)",
     command=("bots", plugin_category),
     info={
         "header": "To get list of bots.",
@@ -127,7 +126,7 @@ async def _(event):
 
 
 @catub.cat_cmd(
-    pattern="users(?: |$)(.*)",
+    pattern="users(?:\s|$)([\s\S]*)",
     command=("users", plugin_category),
     info={
         "header": "To get list of users.",
@@ -149,10 +148,9 @@ async def get_users(show):
         try:
             chat = await show.client.get_entity(input_str)
         except Exception as e:
-            return await edit_delete(show, f"`{str(e)}`", 10)
-    else:
-        if not show.is_group:
-            return await edit_or_reply(show, "`Are you sure this is a group?`")
+            return await edit_delete(show, f"`{e}`", 10)
+    elif not show.is_group:
+        return await edit_or_reply(show, "`Are you sure this is a group?`")
     catevent = await edit_or_reply(show, "`getting users list wait...`  ")
     try:
         if show.pattern_match.group(1):
@@ -177,7 +175,7 @@ async def get_users(show):
 
 
 @catub.cat_cmd(
-    pattern="chatinfo(?: |$)(.*)",
+    pattern="chatinfo(?:\s|$)([\s\S]*)",
     command=("chatinfo", plugin_category),
     info={
         "header": "To get Group details.",
@@ -193,14 +191,17 @@ async def info(event):
     "To get group information"
     catevent = await edit_or_reply(event, "`Analysing the chat...`")
     chat = await get_chatinfo(event, catevent)
+    if chat is None:
+        return
     caption = await fetch_info(chat, event)
     try:
         await catevent.edit(caption, parse_mode="html")
     except Exception as e:
         if BOTLOG:
             await event.client.send_message(
-                BOTLOG_CHATID, f"**Error in chatinfo : **\n`{str(e)}`"
+                BOTLOG_CHATID, f"**Error in chatinfo : **\n`{e}`"
             )
+
         await catevent.edit("`An unexpected error has occurred.`")
 
 
@@ -236,7 +237,8 @@ async def get_chatinfo(event, catevent):
             await catevent.edit("`Channel or supergroup doesn't exist`")
             return None
         except (TypeError, ValueError) as err:
-            await catevent.edit(str(err))
+            LOGS.info(err)
+            await edit_delete(catevent, "**Error:**\n__Can't fetch the chat__")
             return None
     return chat_info
 
@@ -265,7 +267,7 @@ async def fetch_info(chat, event):  # sourcery no-metrics
         )
     except Exception as e:
         msg_info = None
-        LOGS.error(f"Exception: {str(e)}")
+        LOGS.error(f"Exception: {e}")
     # No chance for IndexError as it checks for msg_info.messages first
     first_msg_valid = bool(
         msg_info and msg_info.messages and msg_info.messages[0].id == 1
@@ -380,7 +382,7 @@ async def fetch_info(chat, event):  # sourcery no-metrics
             )
             admins = participants_admins.count if participants_admins else None
         except Exception as e:
-            LOGS.error(f"Exception:{str(e)}")
+            LOGS.error(f"Exception:{e}")
     if bots_list:
         for _ in bots_list:
             bots += 1

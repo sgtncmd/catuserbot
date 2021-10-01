@@ -28,7 +28,7 @@ def zipdir(dirName):
 
 
 @catub.cat_cmd(
-    pattern="zip(?: |$)(.*)",
+    pattern="zip(?:\s|$)([\s\S]*)",
     command=("zip", plugin_category),
     info={
         "header": "To compress the file/folders",
@@ -69,7 +69,7 @@ async def zip_file(event):
 
 
 @catub.cat_cmd(
-    pattern="tar(?: |$)(.*)",
+    pattern="tar(?:\s|$)([\s\S]*)",
     command=("tar", plugin_category),
     info={
         "header": "To compress the file/folders to tar file",
@@ -111,7 +111,7 @@ async def tar_file(event):
 
 
 @catub.cat_cmd(
-    pattern="unzip(?: |$)(.*)",
+    pattern="unzip(?:\s|$)([\s\S]*)",
     command=("unzip", plugin_category),
     info={
         "header": "To unpack the given zip file",
@@ -130,8 +130,9 @@ async def zip_file(event):  # sourcery no-metrics
             start = datetime.now()
             if not zipfile.is_zipfile(path):
                 return await edit_delete(
-                    event, f"`The Given path {str(path)} is not zip file to unpack`"
+                    event, f"`The Given path {path} is not zip file to unpack`"
                 )
+
             mone = await edit_or_reply(event, "`Unpacking....`")
             destination = os.path.join(
                 Config.TMP_DOWNLOAD_DIRECTORY,
@@ -172,7 +173,7 @@ async def zip_file(event):  # sourcery no-metrics
             )
             dl.close()
         except Exception as e:
-            return await edit_delete(mone, f"**Error:**\n__{str(e)}__")
+            return await edit_delete(mone, f"**Error:**\n__{e}__")
         await mone.edit("`Download finished Unpacking now`")
         destination = os.path.join(
             Config.TMP_DOWNLOAD_DIRECTORY,
@@ -194,7 +195,7 @@ async def zip_file(event):  # sourcery no-metrics
 
 
 @catub.cat_cmd(
-    pattern="untar(?: |$)(.*)",
+    pattern="untar(?:\s|$)([\s\S]*)",
     command=("untar", plugin_category),
     info={
         "header": "To unpack the given tar file",
@@ -213,8 +214,9 @@ async def untar_file(event):  # sourcery no-metrics
             start = datetime.now()
             if not is_tarfile(path):
                 return await edit_delete(
-                    event, f"`The Given path {str(path)} is not tar file to unpack`"
+                    event, f"`The Given path {path} is not tar file to unpack`"
                 )
+
             mone = await edit_or_reply(event, "`Unpacking....`")
             destination = os.path.join(
                 Config.TMP_DOWNLOAD_DIRECTORY, (os.path.basename(path).split("."))[0]
@@ -253,7 +255,7 @@ async def untar_file(event):  # sourcery no-metrics
             )
             dl.close()
         except Exception as e:
-            return await edit_delete(mone, f"**Error:**\n__{str(e)}__")
+            return await edit_delete(mone, f"**Error:**\n__{e}__")
         if not is_tarfile(filename):
             return await edit_delete(
                 mone, "`The replied file is not tar file to unpack it recheck it`"

@@ -43,12 +43,12 @@ async def install(event):
                     event, "Errors! This plugin is already installed/pre-installed.", 10
                 )
         except Exception as e:
-            await edit_delete(event, f"**Error:**\n`{str(e)}`", 10)
+            await edit_delete(event, f"**Error:**\n`{e}`", 10)
             os.remove(downloaded_file_name)
 
 
 @catub.cat_cmd(
-    pattern="load (.*)",
+    pattern="load ([\s\S]*)",
     command=("load", plugin_category),
     info={
         "header": "To load a plugin again. if you have unloaded it",
@@ -70,12 +70,12 @@ async def load(event):
     except Exception as e:
         await edit_or_reply(
             event,
-            f"Could not load {shortname} because of the following error.\n{str(e)}",
+            f"Could not load {shortname} because of the following error.\n{e}",
         )
 
 
 @catub.cat_cmd(
-    pattern="send (.*)",
+    pattern="send ([\s\S]*)",
     command=("send", plugin_category),
     info={
         "header": "To upload a plugin file to telegram chat",
@@ -86,9 +86,7 @@ async def load(event):
 async def send(event):
     "To uplaod a plugin file to telegram chat"
     reply_to_id = await reply_id(event)
-    thumb = None
-    if os.path.exists(thumb_image_path):
-        thumb = thumb_image_path
+    thumb = thumb_image_path if os.path.exists(thumb_image_path) else None
     input_str = event.pattern_match.group(1)
     the_plugin_file = f"./userbot/plugins/{input_str}.py"
     if os.path.exists(the_plugin_file):
@@ -107,7 +105,7 @@ async def send(event):
 
 
 @catub.cat_cmd(
-    pattern="unload (.*)",
+    pattern="unload ([\s\S]*)",
     command=("unload", plugin_category),
     info={
         "header": "To unload a plugin temporarily.",
@@ -123,11 +121,11 @@ async def unload(event):
         remove_plugin(shortname)
         await edit_or_reply(event, f"Unloaded {shortname} successfully")
     except Exception as e:
-        await edit_or_reply(event, f"Successfully unload {shortname}\n{str(e)}")
+        await edit_or_reply(event, f"Successfully unload {shortname}\n{e}")
 
 
 @catub.cat_cmd(
-    pattern="uninstall (.*)",
+    pattern="uninstall ([\s\S]*)",
     command=("uninstall", plugin_category),
     info={
         "header": "To uninstall a plugin temporarily.",
@@ -156,4 +154,4 @@ async def unload(event):
         remove_plugin(shortname)
         await edit_or_reply(event, f"{shortname} is Uninstalled successfully")
     except Exception as e:
-        await edit_or_reply(event, f"Successfully uninstalled {shortname}\n{str(e)}")
+        await edit_or_reply(event, f"Successfully uninstalled {shortname}\n{e}")

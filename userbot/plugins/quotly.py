@@ -32,7 +32,7 @@ def get_warp_length(width):
 
 
 @catub.cat_cmd(
-    pattern="qpic(?: |$)(.*)",
+    pattern="qpic(?:\s|$)([\s\S]*)",
     command=("qpic", plugin_category),
     info={
         "header": "Makes quote pic.",
@@ -140,7 +140,7 @@ async def q_pic(event):  # sourcery no-metrics
 
 
 @catub.cat_cmd(
-    pattern="q(?: |$)(.*)",
+    pattern="q(?:\s|$)([\s\S]*)",
     command=("q", plugin_category),
     info={
         "header": "Makes your message as sticker quote.",
@@ -156,8 +156,9 @@ async def stickerchat(catquotes):
         )
     fetchmsg = reply.message
     repliedreply = None
-    if reply.media and reply.media.document.mime_type in ("mp4"):
-        return await edit_or_reply(catquotes, "`this format is not supported now`")
+    mediatype = media_type(reply)
+    if mediatype and mediatype in ["Photo", "Round Video", "Gif"]:
+        return await edit_or_reply(catquotes, "`Replied message is not supported now`")
     catevent = await edit_or_reply(catquotes, "`Making quote...`")
     user = (
         await catquotes.client.get_entity(reply.forward.sender)
@@ -176,7 +177,7 @@ async def stickerchat(catquotes):
 
 
 @catub.cat_cmd(
-    pattern="rq(?: |$)(.*)",
+    pattern="rq(?:\s|$)([\s\S]*)",
     command=("rq", plugin_category),
     info={
         "header": "Makes your message along with the previous replied message as sticker quote",
@@ -192,8 +193,9 @@ async def stickerchat(catquotes):
         )
     fetchmsg = reply.message
     repliedreply = await reply.get_reply_message()
-    if reply.media and reply.media.document.mime_type in ("mp4"):
-        return await edit_or_reply(catquotes, "`this format is not supported now`")
+    mediatype = media_type(reply)
+    if mediatype and mediatype in ["Photo", "Round Video", "Gif"]:
+        return await edit_or_reply(catquotes, "`Replied message is not supported now`")
     catevent = await edit_or_reply(catquotes, "`Making quote...`")
     user = (
         await catquotes.client.get_entity(reply.forward.sender)
@@ -212,7 +214,7 @@ async def stickerchat(catquotes):
 
 
 @catub.cat_cmd(
-    pattern="qbot(?: |$)(.*)",
+    pattern="qbot(?:\s|$)([\s\S]*)",
     command=("qbot", plugin_category),
     info={
         "header": "Makes your message as sticker quote by @quotlybot",

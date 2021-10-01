@@ -17,7 +17,7 @@ BTN_URL_REGEX = re.compile(r"(\[([^\[]+?)\]\<buttonurl:(?:/{0,2})(.+?)(:same)?\>
 
 
 @catub.cat_cmd(
-    pattern="cbutton(?: |$)(.*)",
+    pattern="cbutton(?:\s|$)([\s\S]*)",
     command=("cbutton", plugin_category),
     info={
         "header": "To create button posts",
@@ -84,11 +84,11 @@ async def _(event):
 
 
 @catub.cat_cmd(
-    pattern="ibutton(?: |$)(.*)",
+    pattern="ibutton(?:\s|$)([\s\S]*)",
     command=("ibutton", plugin_category),
     info={
         "header": "To create button posts via inline",
-        "note": f"Markdown is Default to html",
+        "note": "Markdown is Default to html",
         "options": "If you button to be in same row as other button then follow this <buttonurl:link:same> in 2nd button.",
         "usage": [
             "{tr}ibutton <text> [Name on button]<buttonurl:link you want to open>",

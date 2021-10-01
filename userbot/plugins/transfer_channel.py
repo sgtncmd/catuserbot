@@ -13,7 +13,7 @@ plugin_category = "utils"
 
 
 @catub.cat_cmd(
-    pattern="otransfer (.*)",
+    pattern="otransfer ([\s\S]*)",
     command=("otransfer", plugin_category),
     info={
         "header": "To transfer channel ownership.",
@@ -33,6 +33,6 @@ async def _(event):
             )
         )
     except Exception as e:
-        await event.edit(f"**Error:**\n`{str(e)}`")
+        await event.edit(f"**Error:**\n`{e}`")
     else:
         await event.edit("Transferred 🌚")

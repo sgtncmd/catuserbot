@@ -88,7 +88,7 @@ def get_provider(url):
 
 
 @catub.cat_cmd(
-    pattern="watch (.*)",
+    pattern="watch ([\s\S]*)",
     command=("watch", plugin_category),
     info={
         "header": "To search online streaming sites for that movie.",
@@ -104,7 +104,7 @@ async def _(event):
     try:
         streams = get_stream_data(query)
     except Exception as e:
-        return await et.edit(f"**Error :** `{str(e)}`")
+        return await et.edit(f"**Error :** `{e}`")
     title = streams["title"]
     thumb_link = streams["movie_thumb"]
     release_year = streams["release_year"]

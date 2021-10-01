@@ -8,7 +8,7 @@ plugin_category = "utils"
 
 
 @catub.cat_cmd(
-    pattern="invite (.*)",
+    pattern="invite ([\s\S]*)",
     command=("invite", plugin_category),
     info={
         "header": "Add the given user/users to the group where u used the command.",
@@ -41,6 +41,6 @@ async def _(event):
                     )
                 )
             except Exception as e:
-                return await edit_delete(event, f"`{str(e)}`", 5)
+                return await edit_delete(event, f"`{e}`", 5)
 
     await edit_or_reply(event, f"`{to_add_users} is/are Invited Successfully`")

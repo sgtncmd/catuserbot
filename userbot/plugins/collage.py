@@ -17,7 +17,7 @@ plugin_category = "utils"
 
 
 @catub.cat_cmd(
-    pattern="collage(?: |$)(.*)",
+    pattern="collage(?:\s|$)([\s\S]*)",
     command=("collage", plugin_category),
     info={
         "header": "To create collage from still images extracted from video/gif.",
@@ -73,8 +73,9 @@ async def collage(event):
             if files and os.path.exists(files):
                 os.remove(files)
         return await edit_delete(
-            event, f"`media is not supported or try with smaller grid size`", 5
+            event, "`media is not supported or try with smaller grid size`", 5
         )
+
     await event.client.send_file(
         event.chat_id,
         endfile,

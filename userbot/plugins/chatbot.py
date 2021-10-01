@@ -1,3 +1,5 @@
+import random
+
 from telethon.utils import get_display_name
 
 from userbot import catub
@@ -16,6 +18,16 @@ from ..sql_helper.chatbot_sql import (
 from ..sql_helper.globals import gvarstatus
 
 plugin_category = "fun"
+
+tired_response = [
+    "I am little tired, Please give me some rest",
+    "Who are you to ask me questions Continuously",
+    "Leave me alone for some times",
+    "Time to Sleep, I will get back to you soon",
+    "I have a job to do, Come back later",
+    "I need to rest, leave me alone for some times",
+    "I am not feeling well, Please Come back later",
+]
 
 
 @catub.cat_cmd(
@@ -43,7 +55,7 @@ async def add_chatbot(event):
         chat_name = user.first_name
         chat_type = "Personal"
     else:
-        chat_name = event.chat.title
+        chat_name = get_display_name(await event.get_chat())
         chat_type = "Group"
     user_name = user.first_name
     user_username = user.username
@@ -52,7 +64,7 @@ async def add_chatbot(event):
     try:
         addai(chat_id, user_id, chat_name, user_name, user_username, chat_type)
     except Exception as e:
-        await edit_delete(catevent, f"**Error:**\n`{str(e)}`")
+        await edit_delete(catevent, f"**Error:**\n`{e}`")
     else:
         await edit_or_reply(catevent, "Hi")
 
@@ -78,7 +90,7 @@ async def remove_chatbot(event):
         try:
             remove_ai(chat_id, user_id)
         except Exception as e:
-            await edit_delete(catevent, f"**Error:**\n`{str(e)}`")
+            await edit_delete(catevent, f"**Error:**\n`{e}`")
         else:
             await edit_or_reply(event, "Ai has been stopped for the user")
     else:
@@ -122,7 +134,7 @@ async def delete_chatbot(event):
         try:
             remove_users(event.chat_id)
         except Exception as e:
-            await edit_delete(event, f"**Error:**\n`{str(e)}`", 10)
+            await edit_delete(event, f"**Error:**\n`{e}`", 10)
         else:
             await edit_or_reply(event, "Deleted ai for all enabled users in this chat")
 
@@ -185,7 +197,7 @@ async def list_chatbot(event):  # sourcery no-metrics
                 private_chats += (
                     f"☞ [{echos.user_name}](tg://user?id={echos.user_id})\n"
                 )
-        output_str = f"**Ai enabled users in this chat are:**\n" + private_chats
+        output_str = "**Ai enabled users in this chat are:**\n" + private_chats
     await edit_or_reply(event, output_str)
 
 
@@ -194,12 +206,16 @@ async def ai_reply(event):
     if is_added(event.chat_id, event.sender_id) and (event.message.text):
         AI_LANG = gvarstatus("AI_LANG") or "en"
         master_name = get_display_name(await event.client.get_me())
-        response = await rs_client.get_ai_response(
-            message=event.message.text,
-            server="primary",
-            master="CatUserbot",
-            bot=master_name,
-            uid=event.client.uid,
-            language=AI_LANG,
-        )
-        await event.reply(response.message)
+        try:
+            response = await rs_client.get_ai_response(
+                message=event.message.text,
+                server="primary",
+                master="CatUserbot",
+                bot=master_name,
+                uid=event.client.uid,
+                language=AI_LANG,
+            )
+            await event.reply(response.message)
+        except Exception as e:
+            LOGS.error(str(e))
+            await event.reply(random.choice(tired_response))

@@ -9,7 +9,7 @@ plugin_category = "tools"
 
 
 @catub.cat_cmd(
-    pattern="create (b|g|c) (.*)",
+    pattern="create (b|g|c) ([\s\S]*)",
     command=("create", plugin_category),
     info={
         "header": "To create a private group/channel with userbot.",
@@ -72,7 +72,7 @@ async def _(event):
                 f"Channel `{group_name}` created successfully. Join {result.link}",
             )
         except Exception as e:
-            await edit_delete(event, f"**Error:**\n{str(e)}")
+            await edit_delete(event, f"**Error:**\n{e}")
     elif type_of_group == "b":
         answer = await create_supergroup(
             group_name, event.client, Config.TG_BOT_USERNAME, descript
@@ -83,6 +83,6 @@ async def _(event):
                 f"Mega group `{group_name}` created successfully. Join {answer[0].link}",
             )
         else:
-            await edit_delete(event, f"**Error:**\n{str(answer[1])}")
+            await edit_delete(event, f"**Error:**\n{answer[1]}")
     else:
         await edit_delete(event, "Read `.help create` to know how to use me")

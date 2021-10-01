@@ -1,3 +1,4 @@
+import asyncio
 import datetime
 import inspect
 import re
@@ -7,17 +8,27 @@ from pathlib import Path
 from typing import Dict, List, Union
 
 from telethon import TelegramClient, events
-from telethon.errors import MessageIdInvalidError, MessageNotModifiedError
+from telethon.errors import (
+    AlreadyInConversationError,
+    BotInlineDisabledError,
+    BotResponseTimeoutError,
+    ChatSendInlineForbiddenError,
+    ChatSendMediaForbiddenError,
+    ChatSendStickersForbiddenError,
+    FloodWaitError,
+    MessageIdInvalidError,
+    MessageNotModifiedError,
+)
 
 from ..Config import Config
 from ..helpers.utils.events import checking
-from ..helpers.utils.format import paste_text
+from ..helpers.utils.format import paste_message
 from ..helpers.utils.utils import runcmd
 from ..sql_helper.globals import gvarstatus
 from . import BOT_INFO, CMD_INFO, GRP_INFO, LOADED_CMDS, PLG_INFO
 from .cmdinfo import _format_about
 from .data import _sudousers_list, blacklist_chats_list, sudo_enabled_cmds
-from .events import MessageEdited, NewMessage
+from .events import *
 from .fasttelethon import download_file, upload_file
 from .logger import logging
 from .managers import edit_delete
@@ -91,15 +102,15 @@ class CatUserBotClient(TelegramClient):
                 REGEX_.regex2 = re.compile(reg2 + pattern)
 
         def decorator(func):  # sourcery no-metrics
-            async def wrapper(check):
+            async def wrapper(check):  # sourcery no-metrics
                 if groups_only and not check.is_group:
-                    await edit_delete(check, "`I don't think this is a group.`", 10)
-                    return
+                    return await edit_delete(
+                        check, "`I don't think this is a group.`", 10
+                    )
                 if private_only and not check.is_private:
-                    await edit_delete(
+                    return await edit_delete(
                         check, "`I don't think this is a personal Chat.`", 10
                     )
-                    return
                 try:
                     await func(check)
                 except events.StopPropagation:
@@ -110,6 +121,34 @@ class CatUserBotClient(TelegramClient):
                     LOGS.error("Message was same as previous message")
                 except MessageIdInvalidError:
                     LOGS.error("Message was deleted or cant be found")
+                except BotInlineDisabledError:
+                    await edit_delete(check, "`Turn on Inline mode for our bot`", 10)
+                except ChatSendStickersForbiddenError:
+                    await edit_delete(
+                        check, "`I guess i can't send stickers in this chat`", 10
+                    )
+                except BotResponseTimeoutError:
+                    await edit_delete(
+                        check, "`The bot didnt answer to your query in time`", 10
+                    )
+                except ChatSendMediaForbiddenError:
+                    await edit_delete(check, "`You can't send media in this chat`", 10)
+                except AlreadyInConversationError:
+                    await edit_delete(
+                        check,
+                        "`A conversation is already happening with the given chat. try again after some time.`",
+                        10,
+                    )
+                except ChatSendInlineForbiddenError:
+                    await edit_delete(
+                        check, "`You can't send inline messages in this chat.`", 10
+                    )
+                except FloodWaitError as e:
+                    LOGS.error(
+                        f"A flood wait of {e.seconds} occured. wait for {e.seconds} seconds and try"
+                    )
+                    await check.delete()
+                    await asyncio.sleep(e.seconds + 5)
                 except BaseException as e:
                     LOGS.exception(e)
                     if not disable_errors:
@@ -137,7 +176,9 @@ class CatUserBotClient(TelegramClient):
                         output = (await runcmd(command))[:2]
                         result = output[0] + output[1]
                         ftext += result
-                        pastelink = paste_text(ftext, markdown=False)
+                        pastelink = await paste_message(
+                            ftext, pastetype="s", markdown=False
+                        )
                         text = "**CatUserbot Error report**\n\n"
                         link = "[here](https://t.me/catuserbot_support)"
                         text += "If you wanna you can report it"
@@ -252,7 +293,9 @@ class CatUserBotClient(TelegramClient):
                         output = (await runcmd(command))[:2]
                         result = output[0] + output[1]
                         ftext += result
-                        pastelink = paste_text(ftext, markdown=False)
+                        pastelink = await paste_message(
+                            ftext, pastetype="s", markdown=False
+                        )
                         text = "**CatUserbot Error report**\n\n"
                         link = "[here](https://t.me/catuserbot_support)"
                         text += "If you wanna you can report it"
@@ -265,12 +308,12 @@ class CatUserBotClient(TelegramClient):
                             Config.PRIVATE_GROUP_BOT_API_ID, text, link_preview=False
                         )
 
-            from .session import tgbot
+            from .session import catub
 
             if edited is True:
-                tgbot.add_event_handler(func, events.MessageEdited(**kwargs))
+                catub.tgbot.add_event_handler(func, events.MessageEdited(**kwargs))
             else:
-                tgbot.add_event_handler(func, events.NewMessage(**kwargs))
+                catub.tgbot.add_event_handler(func, events.NewMessage(**kwargs))
 
             return wrapper
 
@@ -297,3 +340,9 @@ CatUserBotClient.fast_upload_file = upload_file
 CatUserBotClient.reload = restart_script
 CatUserBotClient.get_msg_link = get_message_link
 CatUserBotClient.check_testcases = checking
+try:
+    send_message_check = TelegramClient.send_message
+except AttributeError:
+    CatUserBotClient.send_message = send_message
+    CatUserBotClient.send_file = send_file
+    CatUserBotClient.edit_message = edit_message

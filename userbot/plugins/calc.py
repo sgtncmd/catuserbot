@@ -8,7 +8,7 @@ plugin_category = "utils"
 
 
 @catub.cat_cmd(
-    pattern="calc (.*)",
+    pattern="calc ([\s\S]*)",
     command=("calc", plugin_category),
     info={
         "header": "To solve basic mathematics equations.",
@@ -50,5 +50,6 @@ async def calculator(event):
 
 
 async def aexec(code, event):
-    exec(f"async def __aexec(event): " + "".join(f"\n {l}" for l in code.split("\n")))
+    exec("async def __aexec(event): " + "".join(f"\n {l}" for l in code.split("\n")))
+
     return await locals()["__aexec"](event)

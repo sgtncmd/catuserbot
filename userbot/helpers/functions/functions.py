@@ -5,12 +5,59 @@ from textwrap import wrap
 from uuid import uuid4
 
 import requests
+
+from ..utils.extdl import install_pip
+
+try:
+    from imdb import IMDb
+except ModuleNotFoundError:
+    install_pip("IMDbPY")
+    from imdb import IMDb
+
 from PIL import Image, ImageColor, ImageDraw, ImageFont
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 
 from ...Config import Config
 from ...sql_helper.globals import gvarstatus
 from ..resources.states import states
+
+imdb = IMDb()
+
+mov_titles = [
+    "long imdb title",
+    "long imdb canonical title",
+    "smart long imdb canonical title",
+    "smart canonical title",
+    "canonical title",
+    "localized title",
+]
+
+
+async def get_cast(casttype, movie):
+    mov_casttype = ""
+    if casttype in list(movie.keys()):
+        i = 0
+        for j in movie[casttype]:
+            if i < 1:
+                mov_casttype += str(j)
+            elif i < 5:
+                mov_casttype += ", " + str(j)
+            else:
+                break
+            i += 1
+    else:
+        mov_casttype += "Not Data"
+    return mov_casttype
+
+
+async def get_moviecollections(movie):
+    result = ""
+    if "box office" in movie.keys():
+        for i in movie["box office"].keys():
+            result += f"\n•  <b>{i}:</b> <code>{movie['box office'][i]}</code>"
+    else:
+        result = "<code>No Data</code>"
+    return result
 
 
 def rand_key():
@@ -81,12 +128,12 @@ def higlighted_text(
     for i, items in enumerate(list_text):
         x, y = (font.getsize(list_text[i])[0] + 50, int(th * 2 - (th / 2)))
         # align masks on the image....left,right & center
-        if align == "right":
-            width_align = "(mask_size-x)"
-        if align == "left":
-            width_align = "0"
         if align == "center":
             width_align = "((mask_size-x)/2)"
+        elif align == "left":
+            width_align = "0"
+        elif align == "right":
+            width_align = "(mask_size-x)"
         clr = ImageColor.getcolor(background, "RGBA")
         if transparency == 0:
             mask_img = Image.new(

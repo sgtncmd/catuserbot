@@ -15,7 +15,7 @@ CARBONLANG = "auto"
 
 
 @catub.cat_cmd(
-    pattern="carbon(?: |$)(.*)",
+    pattern="carbon(?:\s|$)([\s\S]*)",
     command=("carbon", plugin_category),
     info={
         "header": "Carbon generators for given text (Fixed style)",
@@ -85,7 +85,7 @@ async def carbon_api(event):
 
 
 @catub.cat_cmd(
-    pattern="krb(?: |$)(.*)",
+    pattern="krb(?:\s|$)([\s\S]*)",
     command=("krb", plugin_category),
     info={
         "header": "Carbon generators for given text. each time gives  random style. You can also use patcicular style by using semicolon after text and name",
@@ -180,7 +180,7 @@ async def carbon_api(event):
 
 
 @catub.cat_cmd(
-    pattern="kar1(?: |$)(.*)",
+    pattern="kar1(?:\s|$)([\s\S]*)",
     command=("kar1", plugin_category),
     info={
         "header": "Carbon generators for given text (Fixed style)",
@@ -247,7 +247,7 @@ async def carbon_api(event):
 
 
 @catub.cat_cmd(
-    pattern="kar2(?: |$)(.*)",
+    pattern="kar2(?:\s|$)([\s\S]*)",
     command=("kar2", plugin_category),
     info={
         "header": "Carbon generators for given text (Fixed style)",
@@ -303,7 +303,7 @@ async def carbon_api(event):
     await event.client.send_file(
         event.chat_id,
         file,
-        caption=f"Here's your Karbon2",
+        caption="Here's your Karbon2",
         force_document=True,
         reply_to=event.message.reply_to_msg_id,
     )
@@ -314,7 +314,7 @@ async def carbon_api(event):
 
 
 @catub.cat_cmd(
-    pattern="kar3(?: |$)(.*)",
+    pattern="kar3(?:\s|$)([\s\S]*)",
     command=("kar3", plugin_category),
     info={
         "header": "Carbon generators for given text (Fixed style)",
@@ -372,16 +372,17 @@ async def carbon_api(event):
     await event.client.send_file(
         event.chat_id,
         file,
-        caption=f"Here's your Karbon3",
+        caption="Here's your Karbon3",
         force_document=True,
         reply_to=event.message.reply_to_msg_id,
     )
+
     os.remove("./carbon.png")
     await cat.delete()
 
 
 @catub.cat_cmd(
-    pattern="kar4(?: |$)(.*)",
+    pattern="kar4(?:\s|$)([\s\S]*)",
     command=("kar4", plugin_category),
     info={
         "header": "Carbon generators for given text (Fixed style)",
@@ -437,16 +438,17 @@ async def carbon_api(event):
     await event.client.send_file(
         event.chat_id,
         file,
-        caption=f"Here's your Karbon4 ",
+        caption="Here's your Karbon4 ",
         force_document=True,
         reply_to=event.message.reply_to_msg_id,
     )
+
     os.remove("./carbon.png")
     await cat.delete()
 
 
 @catub.cat_cmd(
-    pattern="kargb(?: |$)(.*)",
+    pattern="kargb(?:\s|$)([\s\S]*)",
     command=("kargb", plugin_category),
     info={
         "header": "Carbon generators for given text (random from some selected themes)",
@@ -538,9 +540,10 @@ async def carbon_api(event):
     await event.client.send_file(
         event.chat_id,
         file,
-        caption=f"Here's your karbonrgb",
+        caption="Here's your karbonrgb",
         force_document=True,
         reply_to=event.message.reply_to_msg_id,
     )
+
     os.remove("./carbon.png")
     await cat.delete()
